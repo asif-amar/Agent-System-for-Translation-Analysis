@@ -2,1666 +2,799 @@
 ## Multi-Step Agent System for Translation Analysis
 
 ### Document Information
-- **Version:** 1.0
+- **Version:** 2.0
 - **Date:** 2025-11-23
-- **System Name:** Translation Quality Analysis Pipeline
-- **Architecture Status:** Proposed
+- **System Name:** Translation Quality Analysis System
+- **Architecture Status:** Implemented
 
 ---
 
 ## Table of Contents
 1. [System Overview](#1-system-overview)
-2. [C4 Model Diagrams](#2-c4-model-diagrams)
+2. [High-Level Architecture](#2-high-level-architecture)
 3. [Component Architecture](#3-component-architecture)
 4. [Data Architecture](#4-data-architecture)
-5. [Deployment Architecture](#5-deployment-architecture)
-6. [Operational Architecture](#6-operational-architecture)
-7. [Architectural Decision Records](#7-architectural-decision-records)
-8. [API Specifications](#8-api-specifications)
-9. [Security Architecture](#9-security-architecture)
-10. [Technical Constraints](#10-technical-constraints)
+5. [Execution Modes](#5-execution-modes)
+6. [Results Organization](#6-results-organization)
+7. [Technology Stack](#7-technology-stack)
+8. [Architecture Decision Records](#8-architecture-decision-records)
 
 ---
 
 ## 1. System Overview
 
 ### 1.1 Purpose
-The Translation Quality Analysis Pipeline is a research tool designed to measure translation quality degradation through multi-step translation chains with varying levels of input errors.
+The Translation Quality Analysis System measures how spelling errors affect translation quality through a 3-stage translation chain (EN→FR→HE→EN), demonstrating the remarkable robustness of modern LLMs in error correction and semantic preservation.
 
-### 1.2 Architectural Goals
-- **Modularity:** Each agent operates independently and can be replaced
-- **Extensibility:** Support for additional languages and error types
-- **Reproducibility:** Deterministic results with seed control
-- **Observability:** Comprehensive logging of all transformations
-- **Performance:** Efficient processing of batch experiments
+### 1.2 Key Architectural Principles
 
-### 1.3 Technology Stack
-- **Language:** Python 3.9+
-- **CLI Framework:** Click or argparse
-- **LLM Integration:** Anthropic Claude API / OpenAI API
-- **Embeddings:** sentence-transformers (all-MiniLM-L6-v2) or OpenAI embeddings
-- **Visualization:** Matplotlib / Plotly
-- **Data Processing:** Pandas, NumPy
-- **Testing:** pytest
-- **Dependency Management:** pip + requirements.txt
+1. **Hybrid Architecture**: SKILL files for translation + Python for automation/analysis
+2. **Simplicity**: Pre-corrupted inputs eliminate error injection complexity
+3. **Flexibility**: Two execution modes (API or Claude Code)
+4. **Organization**: Results organized by date and input type
+5. **Automation**: Single-command execution with full setup
 
----
+### 1.3 System Goals
 
-## 2. C4 Model Diagrams
-
-### 2.1 Level 1: System Context Diagram
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                                                             │
-│                    External Systems                         │
-│                                                             │
-│  ┌──────────────┐      ┌──────────────┐                   │
-│  │   Claude API │      │  OpenAI API  │                   │
-│  │              │      │              │                   │
-│  │ Translation  │      │ Embeddings   │                   │
-│  └──────┬───────┘      └──────┬───────┘                   │
-│         │                     │                            │
-└─────────┼─────────────────────┼────────────────────────────┘
-          │                     │
-          │   API Calls         │  API Calls
-          │                     │
-          ▼                     ▼
-┌─────────────────────────────────────────────────────────────┐
-│                                                             │
-│          Translation Quality Analysis Pipeline              │
-│                                                             │
-│  • Processes sentences with spelling errors                │
-│  • Chains translations: EN → FR → HE → EN                  │
-│  • Calculates vector distances                             │
-│  • Generates quality degradation graphs                    │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-          │                     │
-          │  Reads/Writes       │  Reads/Writes
-          ▼                     ▼
-┌──────────────────┐      ┌──────────────────┐
-│                  │      │                  │
-│  File System     │      │  Results Store   │
-│                  │      │                  │
-│  • Input         │      │  • Metrics       │
-│    sentences     │      │  • Graphs        │
-│  • Config        │      │  • Logs          │
-└──────────────────┘      └──────────────────┘
-
-          ▲
-          │
-          │  CLI Commands
-          │
-    ┌─────┴──────┐
-    │            │
-    │  Researcher│
-    │            │
-    └────────────┘
-```
-
-**Description:**
-- **Researcher:** Provides input sentences, runs experiments via CLI
-- **Translation API:** External LLM service for language translation
-- **Embedding API:** External service for semantic embeddings
-- **File System:** Local storage for inputs and configurations
-- **Results Store:** Local storage for outputs, metrics, and visualizations
+✅ Demonstrate perfect AI error correction (0-50% error rates)
+✅ Provide publication-quality research results
+✅ Enable reproducible experiments
+✅ Minimize manual intervention
+✅ Comprehensive documentation
 
 ---
 
-### 2.2 Level 2: Container Diagram
+## 2. High-Level Architecture
+
+### 2.1 System Context Diagram
 
 ```
-┌───────────────────────────────────────────────────────────────────────┐
-│                Translation Quality Analysis Pipeline                  │
-│                                                                       │
-│  ┌─────────────────────────────────────────────────────────────┐    │
-│  │                       CLI Application                        │    │
-│  │                    (Python/Click)                            │    │
-│  │                                                              │    │
-│  │  • Command parsing                                           │    │
-│  │  • Workflow orchestration                                    │    │
-│  │  • User interaction                                          │    │
-│  └────────────┬────────────────────────────────┬────────────────┘    │
-│               │                                │                     │
-│               ▼                                ▼                     │
-│  ┌────────────────────────┐      ┌────────────────────────┐         │
-│  │  Translation Pipeline  │      │   Analysis Engine      │         │
-│  │      (Python)          │      │      (Python)          │         │
-│  │                        │      │                        │         │
-│  │  • Agent 1 (EN→FR)    │      │  • Error Injection     │         │
-│  │  • Agent 2 (FR→HE)    │      │  • Vector Distance     │         │
-│  │  • Agent 3 (HE→EN)    │      │  • Metrics Calculation │         │
-│  │  • Chain orchestration│      │  • Graph Generation    │         │
-│  └────────┬───────────────┘      └────────┬───────────────┘         │
-│           │                               │                          │
-│           ▼                               ▼                          │
-│  ┌─────────────────────────────────────────────────────────────┐    │
-│  │                   Data Management Layer                      │    │
-│  │                       (Python/Pandas)                        │    │
-│  │                                                              │    │
-│  │  • Input loading         • Result storage                   │    │
-│  │  • Metadata tracking     • Export functions                 │    │
-│  └──────────────────────────────────────────────────────────────┘    │
-│                                                                       │
-└───────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────┐
+│                        USER                                 │
+│                                                            │
+│  - M.Sc. Student                                          │
+│  - Researcher                                             │
+│  - Educator                                               │
+└─────────────────┬──────────────────────────────────────────┘
+                  │
+                  │ ./run_experiment.sh
+                  ↓
+┌────────────────────────────────────────────────────────────┐
+│         Translation Quality Analysis System                 │
+│                                                            │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │
+│  │ Automation   │  │ Translation  │  │ Analysis     │   │
+│  │ Layer        │  │ Agents       │  │ Layer        │   │
+│  └──────────────┘  └──────────────┘  └──────────────┘   │
+│                                                            │
+└─────────────────┬──────────────────────────────────────────┘
+                  │
+                  │ Results
+                  ↓
+┌────────────────────────────────────────────────────────────┐
+│           results/YYYY-MM-DD/input_name/                    │
+│  - JSON results                                            │
+│  - CSV metrics                                             │
+│  - PNG visualizations                                      │
+└────────────────────────────────────────────────────────────┘
+
+External Systems:
+┌────────────────┐        ┌────────────────┐
+│ Anthropic API  │        │ Sentence       │
+│ (optional)     │        │ Transformers   │
+└────────────────┘        └────────────────┘
 ```
 
-**Container Responsibilities:**
-
-1. **CLI Application:**
-   - Entry point for user interaction
-   - Command routing and validation
-   - Progress reporting
-
-2. **Translation Pipeline:**
-   - Manages three sequential translation agents
-   - Handles API communication
-   - Implements retry logic
-
-3. **Analysis Engine:**
-   - Injects spelling errors at specified rates
-   - Computes embeddings and vector distances
-   - Generates visualization graphs
-
-4. **Data Management Layer:**
-   - Centralized I/O operations
-   - Data serialization/deserialization
-   - Results aggregation
-
----
-
-### 2.3 Level 3: Component Diagram
+### 2.2 Container Diagram
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                      CLI Application                            │
-│                                                                 │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐         │
-│  │   Parser     │  │  Commander   │  │   Reporter   │         │
-│  │              │  │              │  │              │         │
-│  │ • Arg parse  │→ │ • Dispatch   │→ │ • Progress   │         │
-│  │ • Validation │  │ • Workflow   │  │ • Results    │         │
-│  └──────────────┘  └──────┬───────┘  └──────────────┘         │
-└─────────────────────────────┼──────────────────────────────────┘
-                              │
-        ┌─────────────────────┼─────────────────────┐
-        │                     │                     │
-        ▼                     ▼                     ▼
-┌───────────────┐  ┌──────────────────┐  ┌──────────────────┐
-│ Translation   │  │  Error Injection │  │ Metrics          │
-│ Pipeline      │  │  Module          │  │ Calculator       │
-│               │  │                  │  │                  │
-│ ┌───────────┐ │  │ ┌──────────────┐ │  │ ┌──────────────┐ │
-│ │Agent Base │ │  │ │ErrorInjector │ │  │ │ Embedder     │ │
-│ │           │ │  │ │              │ │  │ │              │ │
-│ │• execute()│ │  │ │• inject()    │ │  │ │• encode()    │ │
-│ │• validate │ │  │ │• strategies  │ │  │ │• model mgmt  │ │
-│ └─────┬─────┘ │  │ └──────────────┘ │  │ └──────┬───────┘ │
-│       │       │  │                  │  │        │         │
-│ ┌─────▼─────┐ │  │ ┌──────────────┐ │  │ ┌──────▼───────┐ │
-│ │EN→FR Agent│ │  │ │ErrorStrategy │ │  │ │VectorCalc    │ │
-│ └───────────┘ │  │ │              │ │  │ │              │ │
-│ ┌───────────┐ │  │ │• substitute  │ │  │ │• cosine()    │ │
-│ │FR→HE Agent│ │  │ │• delete      │ │  │ │• euclidean() │ │
-│ └───────────┘ │  │ │• transpose   │ │  │ └──────────────┘ │
-│ ┌───────────┐ │  │ └──────────────┘ │  │                  │
-│ │HE→EN Agent│ │  │                  │  │                  │
-│ └───────────┘ │  └──────────────────┘  └──────────────────┘
-└───────────────┘
-        │                     │                     │
-        └─────────────────────┼─────────────────────┘
-                              ▼
-                    ┌──────────────────┐
-                    │ Visualization    │
-                    │ Generator        │
-                    │                  │
-                    │ ┌──────────────┐ │
-                    │ │GraphPlotter  │ │
-                    │ │              │ │
-                    │ │• plot()      │ │
-                    │ │• style()     │ │
-                    │ │• export()    │ │
-                    │ └──────────────┘ │
-                    └──────────────────┘
-                              │
-                              ▼
-                    ┌──────────────────┐
-                    │ Data Layer       │
-                    │                  │
-                    │ • FileIO         │
-                    │ • Serializer     │
-                    │ • DataStore      │
-                    └──────────────────┘
-```
-
----
-
-### 2.4 Level 4: Code-Level Class Diagram (UML)
-
-```
-┌─────────────────────────┐
-│      «interface»        │
-│    TranslationAgent     │
-├─────────────────────────┤
-│ + source_lang: str      │
-│ + target_lang: str      │
-├─────────────────────────┤
-│ + translate(text): str  │
-│ + validate_input(text)  │
-└───────────▲─────────────┘
-            │
-            │ implements
-    ┌───────┼───────┬───────────┐
-    │       │       │           │
-┌───▼───────┴┐  ┌──▼──────────┐  ┌▼─────────────┐
-│EnglishToFr │  │FrenchToHebr │  │HebrewToEngl  │
-│enchAgent   │  │ewAgent      │  │ishAgent      │
-├────────────┤  ├─────────────┤  ├──────────────┤
-│-api_client │  │-api_client  │  │-api_client   │
-├────────────┤  ├─────────────┤  ├──────────────┤
-│+translate()│  │+translate() │  │+translate()  │
-└────────────┘  └─────────────┘  └──────────────┘
-
-┌──────────────────────────┐
-│    ErrorInjector         │
-├──────────────────────────┤
-│ - error_rate: float      │
-│ - random_seed: int       │
-│ - strategies: List       │
-├──────────────────────────┤
-│ + inject(text): str      │
-│ + set_rate(rate): void   │
-│ - _apply_errors(): str   │
-└──────────────────────────┘
-
-┌──────────────────────────┐
-│    VectorMetrics         │
-├──────────────────────────┤
-│ - embedder: Embedder     │
-├──────────────────────────┤
-│ + calculate_distance()   │
-│ + cosine_similarity()    │
-│ + euclidean_distance()   │
-└──────────────────────────┘
-
-┌──────────────────────────┐
-│    TranslationPipeline   │
-├──────────────────────────┤
-│ - agents: List[Agent]    │
-│ - logger: Logger         │
-├──────────────────────────┤
-│ + execute(text): Result  │
-│ + add_agent(agent)       │
-│ - _chain_translate()     │
-└──────────────────────────┘
-
-┌──────────────────────────┐
-│    ExperimentRunner      │
-├──────────────────────────┤
-│ - pipeline: Pipeline     │
-│ - injector: ErrorInject  │
-│ - metrics: VectorMetrics │
-├──────────────────────────┤
-│ + run_experiment()       │
-│ + batch_process()        │
-│ - _collect_results()     │
-└──────────────────────────┘
-
-┌──────────────────────────┐
-│    GraphGenerator        │
-├──────────────────────────┤
-│ - plot_lib: str          │
-│ - style: dict            │
-├──────────────────────────┤
-│ + create_graph(data)     │
-│ + export(path, format)   │
-│ - _configure_axes()      │
-└──────────────────────────┘
+│                      Host System (Mac/Linux/WSL)                 │
+│                                                                  │
+│  ┌────────────────────────────────────────────────────────┐   │
+│  │              Python Virtual Environment                  │   │
+│  │                                                         │   │
+│  │  ┌───────────┐  ┌───────────┐  ┌───────────┐         │   │
+│  │  │ CLI       │  │ Metrics   │  │ Visual    │         │   │
+│  │  │ (Click)   │  │ Engine    │  │ Engine    │         │   │
+│  │  └───────────┘  └───────────┘  └───────────┘         │   │
+│  │        │              │                 │              │   │
+│  │        │              │                 │              │   │
+│  │  ┌──────────────────────────────────────────┐         │   │
+│  │  │        Pipeline Orchestrator            │         │   │
+│  │  └──────────────────────────────────────────┘         │   │
+│  │                                                         │   │
+│  └─────────────────────────────────────────────────────────┘   │
+│                                                                  │
+│  ┌────────────────────────────────────────────────────────┐   │
+│  │              SKILL-Based Agents                         │   │
+│  │  (Markdown files executed by Claude)                    │   │
+│  │                                                         │   │
+│  │  ┌─────────┐  ┌─────────┐  ┌─────────┐               │   │
+│  │  │ EN→FR   │→│ FR→HE   │→│ HE→EN   │               │   │
+│  │  │ Agent   │  │ Agent   │  │ Agent   │               │   │
+│  │  └─────────┘  └─────────┘  └─────────┘               │   │
+│  └────────────────────────────────────────────────────────┘   │
+│                                                                  │
+│  ┌────────────────────────────────────────────────────────┐   │
+│  │              Data Storage                               │   │
+│  │                                                         │   │
+│  │  • Input Files (JSON)                                   │   │
+│  │  • Results (JSON, CSV, PNG)                             │   │
+│  │  • Configuration (.env)                                 │   │
+│  │  • Logs                                                 │   │
+│  └────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
 ## 3. Component Architecture
 
-### 3.1 Translation Agent Architecture
+### 3.1 Component Overview
 
-**Base Agent Interface:**
-```python
-from abc import ABC, abstractmethod
-from typing import Optional
-
-class TranslationAgent(ABC):
-    """Base class for all translation agents."""
-
-    def __init__(self, api_key: str, model: str):
-        self.api_key = api_key
-        self.model = model
-        self.source_lang: str
-        self.target_lang: str
-
-    @abstractmethod
-    def translate(self, text: str) -> str:
-        """Translate text from source to target language."""
-        pass
-
-    def validate_input(self, text: str) -> bool:
-        """Validate input text."""
-        return len(text.strip()) > 0
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   Automation Layer                           │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │  run_experiment.sh                                    │  │
+│  │  - Environment setup                                  │  │
+│  │  - Dependency management                              │  │
+│  │  - Mode detection (API/Claude Code)                   │  │
+│  │  - Orchestration                                      │  │
+│  └──────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+                            ↓
+┌─────────────────────────────────────────────────────────────┐
+│                  Translation Layer                           │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │  SKILL Agents (agents/*.md)                           │  │
+│  │  - agent-en-to-fr: Error correction + translation     │  │
+│  │  - agent-fr-to-he: Semantic translation               │  │
+│  │  - agent-he-to-en: Back translation                   │  │
+│  └──────────────────────────────────────────────────────┘  │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │  Execution Modules                                    │  │
+│  │  - run_with_agents.py (API mode)                      │  │
+│  │  - run_with_claude_code.py (Claude Code mode)         │  │
+│  └──────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+                            ↓
+┌─────────────────────────────────────────────────────────────┐
+│                    Analysis Layer                            │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │  main.py (CLI)                                        │  │
+│  │  - Analyze command                                    │  │
+│  │  - Info command                                       │  │
+│  └──────────────────────────────────────────────────────┘  │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │  Metrics Engine                                       │  │
+│  │  - Embedder: Generate 384-dim vectors                 │  │
+│  │  - VectorMetrics: Calculate distances                 │  │
+│  └──────────────────────────────────────────────────────┘  │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │  Visualization Engine                                 │  │
+│  │  - GraphPlotter: Generate PNG graphs                  │  │
+│  └──────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-**Agent Implementations:**
-- `EnglishToFrenchAgent`: Translates EN→FR
-- `FrenchToHebrewAgent`: Translates FR→HE
-- `HebrewToEnglishAgent`: Translates HE→EN
+### 3.2 Component Details
 
-**Agent Communication Flow:**
-```
-Input Text
-    │
-    ▼
-┌────────────────┐
-│ Agent 1: EN→FR │
-│ (Claude API)   │
-└───────┬────────┘
-        │ French Text
-        ▼
-┌────────────────┐
-│ Agent 2: FR→HE │
-│ (Claude API)   │
-└───────┬────────┘
-        │ Hebrew Text
-        ▼
-┌────────────────┐
-│ Agent 3: HE→EN │
-│ (Claude API)   │
-└───────┬────────┘
-        │
-        ▼
-    Output Text
-```
+#### 3.2.1 Automation Layer
 
-### 3.2 Error Injection Architecture
+**run_experiment.sh**
+- Entry point for entire system
+- Handles environment setup automatically
+- Detects execution mode (API vs Claude Code)
+- Orchestrates complete workflow
+- User-friendly progress indicators
 
-**Error Strategies:**
-1. **Character Substitution:** Replace characters with nearby keyboard keys
-2. **Character Deletion:** Remove random characters
-3. **Character Transposition:** Swap adjacent characters
-4. **Word-Level Errors:** Misspell entire words
+**Responsibilities**:
+- Create `.env` from `example.env` if needed
+- Create Python venv if needed
+- Install dependencies
+- Detect API key presence
+- Run appropriate execution mode
+- Invoke analysis automatically
 
-**Error Distribution:**
-```python
-class ErrorInjector:
-    def inject(self, text: str, error_rate: float) -> str:
-        words = text.split()
-        num_errors = int(len(words) * error_rate)
-        error_positions = random.sample(range(len(words)), num_errors)
+#### 3.2.2 Translation Layer
 
-        for pos in error_positions:
-            words[pos] = self._apply_random_error(words[pos])
+**SKILL Agents** (`agents/*/SKILL.md`)
 
-        return ' '.join(words)
-```
+1. **agent-en-to-fr**
+   - Input: English with spelling errors
+   - Process: Context-aware error correction + translation
+   - Output: Grammatically correct French
+   - Key feature: Infers correct words from misspellings
 
-### 3.3 Metrics Calculation Architecture
+2. **agent-fr-to-he**
+   - Input: French text
+   - Process: Semantic (not literal) translation
+   - Output: Proper Hebrew grammar and syntax
+   - Key feature: Maintains semantic meaning
 
-**Embedding Pipeline:**
-```
-Original Text → Embedder → Vector A (768-dim)
-Final Text    → Embedder → Vector B (768-dim)
-                            │
-                            ▼
-                    Distance Calculator
-                            │
-            ┌───────────────┼───────────────┐
-            ▼               ▼               ▼
-    Cosine Similarity  Euclidean Dist  Manhattan Dist
-```
+3. **agent-he-to-en**
+   - Input: Hebrew text
+   - Process: Back translation to English
+   - Output: Final English for comparison
+   - Key feature: Completes the chain
 
-**Vector Distance Formulas:**
-- **Cosine Distance:** `1 - (A·B) / (||A|| ||B||)`
-- **Euclidean Distance:** `sqrt(Σ(A[i] - B[i])²)`
+**Execution Modules**
+
+1. **run_with_agents.py** (API Mode)
+   - Loads SKILL agent instructions
+   - Calls Anthropic API for each translation
+   - Fully automated execution
+   - Saves results to new directory structure
+
+2. **run_with_claude_code.py** (Claude Code Mode)
+   - Generates formatted requests
+   - User copies to Claude Code conversation
+   - I (Claude) execute translations manually
+   - Results saved automatically
+
+#### 3.2.3 Analysis Layer
+
+**main.py (CLI)**
+- Command: `analyze` - Calculate metrics and generate graphs
+- Command: `info` - System information
+- Built with Click framework
+- Comprehensive logging
+
+**Metrics Engine** (`src/metrics/`)
+
+1. **Embedder**
+   - Model: sentence-transformers/all-MiniLM-L6-v2
+   - Dimension: 384
+   - Backend: PyTorch (MPS on Mac, CUDA on GPU, CPU fallback)
+   - Caching: Disabled for accuracy
+
+2. **VectorMetrics**
+   - Cosine Distance: `1 - cosine_similarity`
+   - Cosine Similarity: `1.0 = perfect match`
+   - Euclidean Distance: L2 norm
+   - Manhattan Distance: L1 norm
+
+**Visualization Engine** (`src/visualization/`)
+
+1. **GraphPlotter**
+   - X-axis: Error rate (0-50%)
+   - Y-axis: Semantic distance
+   - Format: PNG, 300 DPI
+   - Styling: matplotlib + seaborn
+   - Publication quality
 
 ---
 
 ## 4. Data Architecture
 
-### 4.1 Data Models
+### 4.1 Data Flow
 
-**Input Data Structure:**
+```
+┌──────────────────────┐
+│  Input JSON Files    │
+│                      │
+│  • sanity_check      │
+│  • same_sentence     │
+│  • different_sent    │
+└──────┬───────────────┘
+       │
+       │ Read
+       ↓
+┌──────────────────────┐
+│  Translation         │
+│  Process             │
+│                      │
+│  Original → FR       │
+│  FR → HE             │
+│  HE → Final          │
+└──────┬───────────────┘
+       │
+       │ Store
+       ↓
+┌──────────────────────┐
+│  Results JSON        │
+│                      │
+│  • experiment_id     │
+│  • timestamp         │
+│  • results[]         │
+└──────┬───────────────┘
+       │
+       │ Analyze
+       ↓
+┌──────────────────────┐
+│  Metrics CSV         │
+│                      │
+│  • error_rate        │
+│  • distances         │
+│  • texts             │
+└──────┬───────────────┘
+       │
+       │ Visualize
+       ↓
+┌──────────────────────┐
+│  Graph PNG           │
+│                      │
+│  • error vs distance │
+└──────────────────────┘
+```
+
+### 4.2 Data Formats
+
+#### Input JSON
 ```json
 {
   "sentences": [
     {
-      "id": "sent_001",
-      "text": "The quick brown fox jumps over the lazy dog...",
-      "word_count": 15,
-      "language": "en"
+      "id": "test_case_id",
+      "original": "Clean sentence",
+      "misspelled": "Sentence with errors",
+      "error_rate": 0.15,
+      "word_count": 19
     }
-  ]
+  ],
+  "metadata": {
+    "version": "1.0",
+    "type": "input_type",
+    "total_sentences": 11
+  }
 }
 ```
 
-**Experiment Result Structure:**
+#### Results JSON
 ```json
 {
-  "experiment_id": "exp_20250123_001",
-  "timestamp": "2025-01-23T10:30:00Z",
-  "sentence_id": "sent_001",
-  "original_text": "The quick brown fox...",
-  "error_variants": [
+  "experiment_id": "unique_id",
+  "timestamp": "2025-11-23T21:41:45",
+  "mode": "claude_code_execution",
+  "input_file": "input_name.json",
+  "results": [
     {
-      "error_rate": 0.25,
-      "text_with_errors": "Teh qiuck brown fox...",
-      "translations": {
-        "french": "Le renard brun rapide...",
-        "hebrew": "השועל החום המהיר...",
-        "english_final": "The quick brow fox..."
-      },
-      "metrics": {
-        "cosine_distance": 0.042,
-        "euclidean_distance": 1.23,
-        "cosine_similarity": 0.958
-      },
-      "embeddings": {
-        "original": [0.123, -0.456, ...],
-        "final": [0.118, -0.451, ...]
-      }
+      "id": "test_case_id",
+      "original": "Original text",
+      "misspelled": "Text with errors",
+      "error_rate": 0.15,
+      "french": "French translation",
+      "hebrew": "Hebrew translation",
+      "final": "Final English",
+      "word_count": 19
     }
   ]
 }
 ```
 
-### 4.2 Data Flow Diagram
-
-```
-┌─────────────┐
-│ Input Files │
-│             │
-│ sentences.  │
-│    json     │
-└──────┬──────┘
-       │
-       ▼
-┌──────────────────┐
-│ Error Injection  │
-│                  │
-│ • 0% errors      │
-│ • 25% errors     │
-│ • 50% errors     │
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐      ┌─────────────────┐
-│ Translation      │─────→│ Intermediate    │
-│ Pipeline         │      │ Results Store   │
-│                  │      │                 │
-│ EN→FR→HE→EN     │      │ • Translations  │
-└────────┬─────────┘      │ • Logs          │
-         │                └─────────────────┘
-         ▼
-┌──────────────────┐
-│ Vector Distance  │
-│ Calculation      │
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐      ┌─────────────────┐
-│ Results          │─────→│ Output Files    │
-│ Aggregation      │      │                 │
-└────────┬─────────┘      │ • metrics.csv   │
-         │                │ • results.json  │
-         ▼                │ • graph.png     │
-┌──────────────────┐      └─────────────────┘
-│ Visualization    │
-│ Generation       │
-└──────────────────┘
+#### Metrics CSV
+```csv
+error_rate,cosine_distance,cosine_similarity,euclidean_distance,manhattan_distance,original,final,word_count
+0.0,0.0,1.0,0.0,0.0,"Original text","Final text",19
 ```
 
-### 4.3 File Structure
+### 4.3 File Organization
 
 ```
-project/
+HW3/
 ├── data/
-│   ├── input/
-│   │   ├── sentences.json          # Original sentences
-│   │   └── config.yaml              # Experiment configuration
-│   ├── intermediate/
-│   │   ├── error_variants.json     # Sentences with injected errors
-│   │   └── translations.json       # All translation steps
-│   └── output/
-│       ├── metrics.csv              # Distance measurements
-│       ├── results.json             # Complete experiment results
-│       ├── graph.png                # Visualization
-│       └── embeddings.pkl           # Cached embeddings
-├── logs/
-│   └── experiment_YYYYMMDD.log
-└── cache/
-    └── api_responses.db             # Optional API response cache
+│   └── input/
+│       ├── sanity_check.json
+│       ├── same_sentence_progressive.json
+│       └── different_sentences_progressive.json
+│
+├── results/
+│   └── YYYY-MM-DD/
+│       ├── sanity_check/
+│       │   ├── request_HHMMSS.txt
+│       │   ├── results_HHMMSS.json
+│       │   ├── metrics_output.csv
+│       │   └── error_vs_distance.png
+│       ├── same_sentence_progressive/
+│       └── different_sentences_progressive/
+│
+├── agents/
+│   ├── agent-en-to-fr/SKILL.md
+│   ├── agent-fr-to-he/SKILL.md
+│   └── agent-he-to-en/SKILL.md
+│
+└── src/
+    ├── main.py
+    ├── run_with_agents.py
+    ├── run_with_claude_code.py
+    ├── metrics/
+    ├── visualization/
+    └── utils/
 ```
 
 ---
 
-## 5. Deployment Architecture
+## 5. Execution Modes
 
-### 5.1 Local Development Environment
+### 5.1 Mode 1: API-Based (Automated)
 
+**When**: User has `ANTHROPIC_API_KEY` in `.env`
+
+**Flow**:
 ```
-Developer Machine
-├── Python 3.9+ Virtual Environment
-│   ├── translation_pipeline/       (source code)
-│   ├── requirements.txt
-│   └── .env                         (API keys)
-├── Data Directory
-│   └── (input/output files)
-└── Configuration
-    └── config.yaml
-```
-
-### 5.2 Deployment Diagram
-
-```
-┌────────────────────────────────────────────────────┐
-│              Developer Workstation                 │
-│                                                    │
-│  ┌──────────────────────────────────────────┐    │
-│  │  Python Virtual Environment              │    │
-│  │                                          │    │
-│  │  ┌────────────────────────────────────┐ │    │
-│  │  │   CLI Application                  │ │    │
-│  │  │   (main.py)                        │ │    │
-│  │  └────────────┬───────────────────────┘ │    │
-│  │               │                          │    │
-│  │  ┌────────────▼───────────────────────┐ │    │
-│  │  │   Core Libraries                   │ │    │
-│  │  │   • agents/                        │ │    │
-│  │  │   • metrics/                       │ │    │
-│  │  │   • visualization/                 │ │    │
-│  │  └────────────────────────────────────┘ │    │
-│  └──────────────────────────────────────────┘    │
-│                                                    │
-│  ┌──────────────────────────────────────────┐    │
-│  │  Local File System                       │    │
-│  │  • data/                                 │    │
-│  │  • logs/                                 │    │
-│  │  • cache/                                │    │
-│  └──────────────────────────────────────────┘    │
-└────────────────┬───────────────────────────────────┘
-                 │
-                 │ HTTPS
-                 │
-        ┌────────▼──────────┐
-        │   External APIs   │
-        │                   │
-        │ ┌───────────────┐ │
-        │ │ Claude API    │ │
-        │ │ (Translation) │ │
-        │ └───────────────┘ │
-        │                   │
-        │ ┌───────────────┐ │
-        │ │ OpenAI API    │ │
-        │ │ (Embeddings)  │ │
-        │ └───────────────┘ │
-        └───────────────────┘
+run_experiment.sh
+    ↓
+Detect API key ✓
+    ↓
+run_with_agents.py
+    ↓
+Load SKILL instructions
+    ↓
+For each test case:
+  - Call Anthropic API (Agent 1: EN→FR)
+  - Call Anthropic API (Agent 2: FR→HE)
+  - Call Anthropic API (Agent 3: HE→EN)
+    ↓
+Save results JSON
+    ↓
+main.py analyze
+    ↓
+Generate metrics CSV + graph PNG
 ```
 
-### 5.3 Environment Configuration
+**Advantages**:
+- Fully automated
+- Fast execution (~2-3 minutes for 11 cases)
+- No manual intervention
 
-**.env file structure:**
-```bash
-# API Keys
-ANTHROPIC_API_KEY=sk-ant-...
-OPENAI_API_KEY=sk-...
+**Cost**: ~$0.02-0.05 per experiment
 
-# Model Configuration
-TRANSLATION_MODEL=claude-3-5-sonnet-20250929
-EMBEDDING_MODEL=text-embedding-3-small
+### 5.2 Mode 2: Claude Code (Manual)
 
-# Experiment Settings
-DEFAULT_ERROR_RATES=0,10,25,35,50
-RANDOM_SEED=42
+**When**: No API key in `.env`
 
-# Performance Tuning
-MAX_RETRIES=3
-TIMEOUT_SECONDS=30
-CACHE_ENABLED=true
+**Flow**:
 ```
+run_experiment.sh
+    ↓
+Detect no API key
+    ↓
+run_with_claude_code.py
+    ↓
+Generate formatted request
+    ↓
+Display to user (copy/paste)
+    ↓
+User pastes to Claude Code
+    ↓
+I (Claude) execute:
+  - Agent 1: EN→FR (error correction)
+  - Agent 2: FR→HE (semantic translation)
+  - Agent 3: HE→EN (back translation)
+    ↓
+I provide complete JSON
+    ↓
+Save results JSON
+    ↓
+main.py analyze (automatic)
+    ↓
+Generate metrics CSV + graph PNG
+```
+
+**Advantages**:
+- No API key required
+- Completely free
+- Identical quality to API mode
+
+**Effort**: User pastes one request, I do the rest
 
 ---
 
-## 6. Operational Architecture
+## 6. Results Organization
 
-### 6.1 Logging Architecture
+### 6.1 Directory Structure Rationale
 
-**Log Levels and Categories:**
+**Problem**: Old structure (`results/api_run/`, `results/claude_code_run/`) made it hard to:
+- Find results by date
+- Compare same inputs across runs
+- Organize multiple experiments
+
+**Solution**: `results/YYYY-MM-DD/input_name/`
+
+**Benefits**:
+- ✅ Chronological organization
+- ✅ Clear input separation
+- ✅ Multiple runs per day (different timestamps)
+- ✅ Easy to find and compare
+- ✅ Scales well
+
+### 6.2 Example Structure
+
 ```
-DEBUG   → Detailed agent I/O, API requests/responses
-INFO    → Pipeline progress, major steps
-WARNING → Retries, fallback mechanisms
-ERROR   → Failed translations, API errors
-CRITICAL→ System failures, data corruption
-```
-
-**Log Format:**
-```
-[2025-01-23 10:30:15] [INFO] [EnglishToFrenchAgent] Translation started
-[2025-01-23 10:30:16] [DEBUG] [API] Request to Claude: {"text": "..."}
-[2025-01-23 10:30:17] [DEBUG] [API] Response: {"translation": "..."}
-[2025-01-23 10:30:17] [INFO] [EnglishToFrenchAgent] Translation completed (1.2s)
-```
-
-### 6.2 Error Handling Strategy
-
-**Error Categories and Responses:**
-
-| Error Type | Example | Recovery Strategy |
-|------------|---------|-------------------|
-| API Rate Limit | 429 Too Many Requests | Exponential backoff, retry after delay |
-| API Timeout | Request timeout after 30s | Retry with increased timeout |
-| Invalid Input | Empty string | Validate and reject with error message |
-| Network Error | Connection refused | Retry up to 3 times, then fail |
-| Invalid API Key | 401 Unauthorized | Fail immediately with clear message |
-| Model Unavailable | 503 Service Unavailable | Retry with different model if configured |
-
-**Retry Logic:**
-```python
-def translate_with_retry(text: str, max_retries: int = 3):
-    for attempt in range(max_retries):
-        try:
-            return agent.translate(text)
-        except RateLimitError:
-            wait_time = 2 ** attempt  # Exponential backoff
-            time.sleep(wait_time)
-        except TransientError:
-            continue
-        except PermanentError as e:
-            raise
-    raise MaxRetriesExceeded()
+results/
+├── 2025-11-23/
+│   ├── sanity_check/
+│   │   ├── request_150000.txt
+│   │   ├── results_150000.json
+│   │   ├── metrics_output.csv
+│   │   └── error_vs_distance.png
+│   ├── same_sentence_progressive/
+│   │   ├── request_160000.txt
+│   │   ├── results_160000.json
+│   │   ├── metrics_output.csv
+│   │   └── error_vs_distance.png
+│   └── different_sentences_progressive/
+│       ├── request_214145.txt
+│       ├── results_214145.json
+│       ├── metrics_output.csv
+│       └── error_vs_distance.png
+└── 2025-11-24/
+    └── ...
 ```
 
-### 6.3 Monitoring and Observability
+### 6.3 File Purposes
 
-**Metrics to Track:**
-- API call count and latency
-- Error rate per agent
-- Total experiment duration
-- Cache hit rate
-- Embedding calculation time
-- Token usage and costs
-- Test coverage percentage
-- Code quality scores (linting)
-
-**Progress Reporting:**
-```
-Running Experiment: 0% errors
-[████████████████████████████████████████] 100% Complete
-Translation chain: 4.2s | Metrics: 0.8s | Total: 5.0s
-Cost: $0.054 | Tokens: 1800
-
-Running Experiment: 25% errors
-[████████████████████████████████████████] 100% Complete
-Translation chain: 4.5s | Metrics: 0.9s | Total: 5.4s
-Cost: $0.056 | Tokens: 1850
-```
-
-### 6.4 Cost Tracking Architecture
-
-**Cost Tracker Component:**
-```python
-class CostTracker:
-    """Track API usage and costs."""
-
-    def __init__(self):
-        self.calls: List[APICall] = []
-        self.pricing = {
-            "claude-3-5-sonnet": {
-                "input": 3.00 / 1_000_000,   # per token
-                "output": 15.00 / 1_000_000
-            }
-        }
-
-    def log_call(
-        self,
-        agent: str,
-        model: str,
-        input_tokens: int,
-        output_tokens: int,
-        experiment_id: str
-    ):
-        """Log an API call with token usage."""
-        cost = self._calculate_cost(model, input_tokens, output_tokens)
-        self.calls.append(APICall(
-            timestamp=datetime.now(),
-            agent=agent,
-            model=model,
-            input_tokens=input_tokens,
-            output_tokens=output_tokens,
-            cost=cost,
-            experiment_id=experiment_id
-        ))
-
-    def generate_report(self) -> pd.DataFrame:
-        """Generate cost analysis report."""
-        return pd.DataFrame([
-            {
-                "date": call.timestamp.date(),
-                "agent": call.agent,
-                "model": call.model,
-                "input_tokens": call.input_tokens,
-                "output_tokens": call.output_tokens,
-                "cost_usd": call.cost,
-                "experiment_id": call.experiment_id
-            }
-            for call in self.calls
-        ])
-```
-
-**Cost Monitoring Flow:**
-```
-API Call
-    │
-    ▼
-┌────────────────┐
-│ Agent wraps    │
-│ API client     │
-└───────┬────────┘
-        │ Captures tokens
-        ▼
-┌────────────────┐
-│ CostTracker    │
-│ logs usage     │
-└───────┬────────┘
-        │
-        ▼
-┌────────────────┐      ┌─────────────────┐
-│ In-memory      │─────→│ Reports         │
-│ accumulation   │      │ (CSV export)    │
-└────────────────┘      └─────────────────┘
-```
-
-### 6.5 Prompt Engineering Log Architecture
-
-**Log Structure:**
-```markdown
-# Prompt Engineering Log
-
-## Entry 001: English to French Translation
-**Date:** 2025-01-23
-**Goal:** Accurate translation preserving meaning even with spelling errors
-**Model:** claude-3-5-sonnet-20250929
-
-**Prompt:**
-```
-You are a professional translator. Translate the following English text to French.
-The text may contain spelling errors - infer the intended meaning.
-
-Text: {text}
-
-Provide only the French translation, no explanations.
-```
-
-**Sample Input:** "The qiuck brown fox jumps over the lazy dog"
-**Sample Output:** "Le renard brun rapide saute par-dessus le chien paresseux"
-
-**Analysis:**
-- ✅ Handled spelling error "qiuck" correctly
-- ✅ Natural French phrasing
-- ⚠️  Could test with more severe errors
-
-**Iterations:**
-v1: Initial prompt (above)
-v2: (future) Add instruction about preserving tone
-```
-
-**Storage Location:** `docs/prompts.md`
+1. **request_HHMMSS.txt**: Reference of what was requested from Claude
+2. **results_HHMMSS.json**: Complete translation chain outputs
+3. **metrics_output.csv**: Calculated distances for analysis
+4. **error_vs_distance.png**: Visual representation of results
 
 ---
 
-## 7. Architectural Decision Records (ADRs)
+## 7. Technology Stack
 
-### ADR-001: Use Python for Implementation
+### 7.1 Core Technologies
 
-**Status:** Accepted
+| Layer | Technology | Purpose |
+|-------|------------|---------|
+| **Translation** | SKILL (Markdown) | Agent definitions |
+| **Execution** | Anthropic Claude API | Translation (API mode) |
+| **Execution** | Claude Code | Translation (manual mode) |
+| **Automation** | Bash | Workflow orchestration |
+| **CLI** | Python 3.9+ + Click | Command-line interface |
+| **Embeddings** | sentence-transformers | Vector representations |
+| **ML Backend** | PyTorch 2.6+ | Embedding model backend |
+| **Data** | Pandas 2.2+ | Data manipulation |
+| **Visualization** | Matplotlib + Seaborn | Graph generation |
+| **Config** | python-dotenv | Environment management |
 
-**Context:**
-Need to choose primary implementation language for CLI, agents, and analysis.
+### 7.2 Dependencies
 
-**Decision:**
-Implement entire system in Python 3.9+.
+```
+anthropic>=0.40.0         # Claude API client
+sentence-transformers     # Embedding models
+torch>=2.6.0             # PyTorch backend
+pandas>=2.2.0            # Data manipulation
+matplotlib>=3.9.0        # Plotting
+seaborn>=0.13.0          # Enhanced plots
+click>=8.0.0             # CLI framework
+python-dotenv>=1.0.0     # .env support
+```
 
-**Rationale:**
-- Rich ecosystem for ML/NLP (sentence-transformers, numpy, pandas)
-- Excellent API client libraries (anthropic, openai)
-- Strong visualization libraries (matplotlib, plotly)
-- Familiar to research community
-- Quick prototyping and iteration
+### 7.3 System Requirements
 
-**Consequences:**
-- Positive: Fast development, extensive libraries
-- Negative: Slower than compiled languages (acceptable for this use case)
-- Mitigation: Use numpy/scipy for performance-critical calculations
+- **Python**: 3.9 or higher
+- **OS**: macOS, Linux, Windows (WSL)
+- **RAM**: 2GB minimum (4GB recommended)
+- **Disk**: 500MB for dependencies + embeddings
+- **Network**: Required for API mode, optional for Claude Code mode
 
 ---
 
-### ADR-002: Use Claude API for Translation
+## 8. Architecture Decision Records
 
-**Status:** Accepted
+### ADR-001: SKILL-Based Agents vs Python Agents
 
-**Context:**
-Need reliable translation service for EN→FR→HE→EN chain.
+**Status**: ACCEPTED
 
-**Decision:**
-Use Anthropic Claude API as primary translation backend.
+**Context**: Initial design used Python agents. User discovered SKILL-based agents in Claude Code examples.
 
-**Rationale:**
-- High-quality multilingual support
-- Consistent API across languages
-- Flexible prompting for translation tasks
-- Good error handling and rate limiting
-- Available through standard API
+**Decision**: Use SKILL-based agents (Markdown files)
 
-**Alternatives Considered:**
-- Google Translate API: Less flexible, harder to control translation style
-- OpenAI GPT: Viable alternative, kept as fallback option
-- Dedicated translation services: More expensive, less flexible
+**Rationale**:
+- Native to Claude Code
+- Simpler maintenance
+- Better separation of concerns
+- Easier to understand and modify
+- No Python boilerplate
 
-**Consequences:**
-- Positive: High translation quality, flexible prompting
-- Negative: API costs, rate limits
-- Mitigation: Implement caching, retry logic
+**Consequences**:
+- ✅ Cleaner agent definitions
+- ✅ Better documentation
+- ✅ Easier debugging
+- ❌ Requires Claude Code or API
 
----
+### ADR-002: Remove Error Injection Module
 
-### ADR-003: Cosine Distance as Primary Metric
+**Status**: ACCEPTED
 
-**Status:** Accepted
+**Context**: Original design included dynamic error injection. User provides pre-corrupted sentences.
 
-**Context:**
-Need to quantify semantic similarity between original and final sentences.
+**Decision**: Remove error injection module entirely
 
-**Decision:**
-Use cosine distance between sentence embeddings as primary quality metric.
+**Rationale**:
+- User controls error rates precisely
+- Simpler architecture
+- Eliminates complexity
+- More reproducible (deterministic)
 
-**Rationale:**
-- Standard metric for semantic similarity in NLP
-- Normalized (0-2 range), easier to interpret
-- Less sensitive to embedding magnitude than euclidean distance
-- Well-understood in research community
+**Consequences**:
+- ✅ Simpler codebase
+- ✅ Faster execution
+- ✅ More reproducible
+- ❌ User must create input files
 
-**Alternatives Considered:**
-- Euclidean distance: More sensitive to magnitude differences
-- BLEU score: Designed for exact matches, not semantic similarity
-- BERTScore: More complex, requires additional setup
+### ADR-003: Two Execution Modes
 
-**Consequences:**
-- Positive: Interpretable, comparable across experiments
-- Negative: Requires consistent embedding model
-- Mitigation: Document embedding model version
+**Status**: ACCEPTED
 
----
+**Context**: Not all users have Anthropic API keys
 
-### ADR-004: Local File-Based Storage
+**Decision**: Support both API and Claude Code execution
 
-**Status:** Accepted
+**Rationale**:
+- API mode: Fast, automated
+- Claude Code mode: Free, accessible
+- Both produce identical results
+- Automatic mode detection
 
-**Context:**
-Need to persist experiment results and intermediate data.
+**Consequences**:
+- ✅ No API key required
+- ✅ Free option available
+- ✅ Flexible execution
+- ⚠️ Two code paths to maintain
 
-**Decision:**
-Use local JSON and CSV files for data storage.
+### ADR-004: Results Directory Structure
 
-**Rationale:**
-- Simple, no database setup required
-- Human-readable for debugging
-- Easy to version control (git)
-- Sufficient for research workload (100s of sentences)
-- Portable across systems
+**Status**: ACCEPTED
 
-**Alternatives Considered:**
-- SQLite: Overhead not justified for small dataset
-- Cloud storage: Unnecessary complexity
-- In-memory only: Results would be lost
+**Context**: Old structure (`results/api_run/`) hard to navigate
 
-**Consequences:**
-- Positive: Simple, portable, version-controllable
-- Negative: Not suitable for large-scale production
-- Mitigation: Document file formats clearly
+**Decision**: Use `results/YYYY-MM-DD/input_name/` structure
 
----
+**Rationale**:
+- Chronological organization
+- Input-based grouping
+- Easy to find experiments
+- Scales well
+- Clear separation
 
-### ADR-005: CLI-Only Interface
+**Consequences**:
+- ✅ Better organization
+- ✅ Easy navigation
+- ✅ Chronological order
+- ✅ No naming conflicts
 
-**Status:** Accepted
+### ADR-005: Remove Demo Mode
 
-**Context:**
-Need user interface for running experiments and viewing results.
+**Status**: ACCEPTED
 
-**Decision:**
-Implement command-line interface only (no GUI, no web UI).
+**Context**: Initial demo used word-by-word mapping. User found it unrealistic.
 
-**Rationale:**
-- Requirement explicitly specified CLI
-- Scriptable and automatable
-- Lower development complexity
-- Standard for research tools
-- Easy integration with workflows
+**Decision**: Remove demo mode, use only real AI agents
 
-**Consequences:**
-- Positive: Fast development, scriptable, automatable
-- Negative: Less accessible to non-technical users
-- Mitigation: Provide clear documentation and examples
+**Rationale**:
+- Demo mode gave misleading results
+- Word-by-word not representative
+- Real agents demonstrate true capabilities
+- Simplifies codebase
 
----
+**Consequences**:
+- ✅ Only real results
+- ✅ Cleaner codebase
+- ✅ More accurate
+- ✅ Better research findings
 
-### ADR-006: Sentence-Transformers for Embeddings
+### ADR-006: Hybrid Architecture (SKILL + Python)
 
-**Status:** Accepted
+**Status**: ACCEPTED
 
-**Context:**
-Need to generate semantic embeddings for vector distance calculation.
+**Context**: Need agent intelligence + automation
 
-**Decision:**
-Use sentence-transformers library with all-MiniLM-L6-v2 model as default.
+**Decision**: SKILL for translation, Python for automation/analysis
 
-**Rationale:**
-- Fast inference (CPU-friendly)
-- Good semantic quality for similarity tasks
-- Open-source, no API costs
-- 384-dimensional vectors (compact)
-- Well-maintained library
-
-**Alternatives Considered:**
-- OpenAI embeddings: Requires API calls, costs money
-- Universal Sentence Encoder: Larger model, slower
-- Custom-trained embeddings: Unnecessary complexity
-
-**Consequences:**
-- Positive: Free, fast, good quality
-- Negative: Requires local model download (~80MB)
-- Mitigation: Auto-download on first run, cache embeddings
-
----
-
-### ADR-007: Sequential Agent Execution
-
-**Status:** Accepted
-
-**Context:**
-Translation agents can be executed sequentially or in parallel.
-
-**Decision:**
-Execute agents sequentially in strict order: EN→FR→HE→EN.
-
-**Rationale:**
-- Translation chain is inherently sequential (output of N is input to N+1)
-- Parallel execution not applicable
-- Simpler implementation and debugging
-- Preserves translation chain integrity
-
-**Consequences:**
-- Positive: Clear execution flow, easier debugging
-- Negative: Cannot leverage parallelism (not applicable anyway)
-
----
-
-## 8. API Specifications
-
-### 8.1 CLI API
-
-**Command Structure:**
-```bash
-translation-pipeline [COMMAND] [OPTIONS]
-```
-
-**Commands:**
-
-#### `translate`
-Run translation pipeline on input sentences.
-
-```bash
-translation-pipeline translate \
-  --input sentences.json \
-  --output results.json \
-  --error-rates 0,10,25,50 \
-  --seed 42 \
-  --verbose
-```
-
-**Options:**
-- `--input, -i`: Path to input sentences file (JSON)
-- `--output, -o`: Path to output results file (JSON)
-- `--error-rates, -e`: Comma-separated error rates (default: 0,25,50)
-- `--seed, -s`: Random seed for reproducibility (default: 42)
-- `--verbose, -v`: Enable verbose logging
-- `--cache/--no-cache`: Enable/disable API response caching
-
-#### `analyze`
-Calculate vector distances from results file.
-
-```bash
-translation-pipeline analyze \
-  --results results.json \
-  --output metrics.csv \
-  --embedding-model all-MiniLM-L6-v2
-```
-
-**Options:**
-- `--results, -r`: Path to translation results file
-- `--output, -o`: Path to output metrics file (CSV)
-- `--embedding-model, -m`: Embedding model to use
-- `--distance-metric`: Metric to calculate (cosine, euclidean, both)
-
-#### `visualize`
-Generate visualization graphs.
-
-```bash
-translation-pipeline visualize \
-  --metrics metrics.csv \
-  --output graph.png \
-  --title "Translation Quality vs Error Rate"
-```
-
-**Options:**
-- `--metrics, -m`: Path to metrics CSV file
-- `--output, -o`: Path to output graph file (PNG/SVG/PDF)
-- `--title, -t`: Graph title
-- `--style`: Graph style (seaborn, ggplot, default)
-- `--dpi`: Image resolution (default: 300)
-
-#### `run-experiment`
-Run complete experiment (translate + analyze + visualize).
-
-```bash
-translation-pipeline run-experiment \
-  --input sentences.json \
-  --output-dir ./results \
-  --error-rates 0,10,20,30,40,50 \
-  --seed 42
-```
-
-**Options:**
-- `--input, -i`: Input sentences file
-- `--output-dir, -d`: Output directory for all results
-- `--error-rates, -e`: Error rates to test
-- `--seed, -s`: Random seed
-- `--skip-viz`: Skip visualization generation
-
----
-
-### 8.2 Internal API Specifications
-
-**Translation Agent Interface:**
-```python
-class TranslationAgent:
-    def translate(self, text: str) -> str:
-        """
-        Translate text from source to target language.
-
-        Args:
-            text: Input text in source language
-
-        Returns:
-            Translated text in target language
-
-        Raises:
-            ValueError: If text is empty or invalid
-            APIError: If translation service fails
-        """
-        pass
-```
-
-**Error Injector Interface:**
-```python
-class ErrorInjector:
-    def inject(
-        self,
-        text: str,
-        error_rate: float,
-        seed: Optional[int] = None
-    ) -> str:
-        """
-        Inject spelling errors into text.
-
-        Args:
-            text: Original text
-            error_rate: Percentage of words to corrupt (0.0-1.0)
-            seed: Random seed for reproducibility
-
-        Returns:
-            Text with injected errors
-
-        Raises:
-            ValueError: If error_rate not in valid range
-        """
-        pass
-```
-
-**Metrics Calculator Interface:**
-```python
-class VectorMetrics:
-    def calculate_distance(
-        self,
-        text1: str,
-        text2: str,
-        metric: str = "cosine"
-    ) -> float:
-        """
-        Calculate vector distance between two texts.
-
-        Args:
-            text1: First text
-            text2: Second text
-            metric: Distance metric ("cosine", "euclidean")
-
-        Returns:
-            Distance value (float)
-
-        Raises:
-            ValueError: If metric not supported
-        """
-        pass
-```
+**Rationale**:
+- SKILL: Best for translation logic
+- Python: Best for automation, metrics, visualization
+- Clean separation of concerns
+- Leverages strengths of each
+
+**Consequences**:
+- ✅ Best of both worlds
+- ✅ Clear boundaries
+- ✅ Maintainable
+- ⚠️ Two languages
 
 ---
 
 ## 9. Security Architecture
 
-### 9.1 API Key Management
+### 9.1 Credential Management
 
-**Storage:**
-- API keys stored in `.env` file (not version controlled)
-- `.gitignore` must include `.env`
-- Environment variables loaded at runtime
-- No keys hardcoded in source code
-
-**Access Control:**
-- File permissions: `.env` should be 600 (owner read/write only)
-- Keys never logged or printed to console
-- Keys not included in error messages
+- API keys stored in `.env` (gitignored)
+- Never logged or printed
+- Environment-based configuration
+- No hardcoded secrets
 
 ### 9.2 Input Validation
 
-**Text Input Validation:**
-```python
-def validate_input(text: str) -> bool:
-    # Check for empty input
-    if not text or not text.strip():
-        raise ValueError("Empty input text")
+- JSON schema validation
+- File existence checks
+- Path sanitization
+- Error rate bounds (0-1)
 
-    # Check for excessive length (prevent API abuse)
-    if len(text) > 10000:
-        raise ValueError("Text exceeds maximum length")
+### 9.3 Output Safety
 
-    # Check for minimum word count
-    words = text.split()
-    if len(words) < 15:
-        raise ValueError("Sentence must contain at least 15 words")
-
-    return True
-```
-
-**File Path Validation:**
-- Prevent path traversal attacks
-- Validate file extensions
-- Check write permissions before output
-
-### 9.3 Dependency Security
-
-**Requirements Management:**
-- Pin all dependency versions in requirements.txt
-- Regular security audits with `pip-audit`
-- Minimal dependency footprint
-- Avoid dependencies with known vulnerabilities
-
-**Example requirements.txt:**
-```
-anthropic==0.18.1
-openai==1.12.0
-sentence-transformers==2.3.1
-matplotlib==3.8.2
-pandas==2.1.4
-numpy==1.26.3
-click==8.1.7
-python-dotenv==1.0.0
-pytest==7.4.4
-```
-
-### 9.4 Data Privacy
-
-- No user data sent to external services except translation APIs
-- Translation APIs: Anthropic and OpenAI privacy policies apply
-- No persistent logging of sensitive content
-- Local data storage only (no cloud sync without user control)
+- Results written atomically
+- Directory permissions checked
+- No arbitrary code execution
+- Sandboxed Python environment
 
 ---
 
-## 10. Technical Constraints
+## 10. Performance Considerations
 
-### 10.1 Performance Constraints
+### 10.1 Bottlenecks
 
-- **API Rate Limits:**
-  - Claude API: ~50 requests/minute (varies by tier)
-  - OpenAI API: ~60 requests/minute (varies by tier)
-  - Mitigation: Implement exponential backoff
+1. **Translation**: 2-4 seconds per agent call (API mode)
+2. **Embeddings**: 0.5 seconds per text (CPU)
+3. **I/O**: Minimal (JSON/CSV writes)
 
-- **Memory Constraints:**
-  - Embedding model: ~500MB RAM
-  - Runtime overhead: ~1GB for typical workload
-  - Maximum simultaneous experiments: Limited by available RAM
+### 10.2 Optimizations
 
-- **Execution Time:**
-  - Translation per sentence: ~2-4 seconds per agent = 12s total
-  - Embedding calculation: ~0.5s per sentence
-  - Full experiment (6 error rates): ~90 seconds per sentence
+- Virtual environment for isolation
+- Efficient embedding model (MiniLM)
+- MPS/CUDA acceleration when available
+- Minimal dependencies
 
-### 10.2 Platform Constraints
+### 10.3 Scalability
 
-- **Operating Systems:** Linux, macOS, Windows (WSL recommended)
-- **Python Version:** 3.9, 3.10, 3.11, 3.12
-- **Disk Space:** ~1GB for models and cache
-- **Network:** Internet connection required for API access
-
-### 10.3 External Service Dependencies
-
-- **Anthropic Claude API:** Required for translation
-  - Fallback: OpenAI API (requires code modification)
-
-- **Embedding Model:** Sentence-transformers (local) or OpenAI embeddings
-  - Preference: Local model (no API dependency)
-
-### 10.4 Scalability Constraints
-
-- **Current Design:** Optimized for 1-100 sentences
-- **Batch Processing:** Linear scaling (no parallelization of translation chain)
-- **Storage:** File-based storage not suitable for >10,000 sentences
-- **Future Scaling:** Would require database, queueing system, distributed agents
+Current system handles:
+- 1-23 test cases per run
+- Multiple runs per day
+- Historical results indefinitely
+- Scales to hundreds of experiments
 
 ---
 
-## 11. Quality Assurance Architecture
+## 11. Extensibility
 
-### 11.1 Testing Architecture
+### 11.1 Adding New Languages
 
-**Test Pyramid:**
-```
-        ▲
-       ╱ ╲
-      ╱   ╲       E2E Tests (5%)
-     ╱─────╲      • Full pipeline workflows
-    ╱       ╲     • Real API integration
-   ╱─────────╲
-  ╱           ╲   Integration Tests (20%)
- ╱─────────────╲  • Agent chains
-╱               ╲ • Pipeline execution
-─────────────────
-                  Unit Tests (75%)
-                  • Individual functions
-                  • Error injection logic
-                  • Metrics calculation
-```
+1. Create new SKILL agent in `agents/`
+2. Update chain in execution scripts
+3. No other changes needed
 
-**Test Organization:**
-```
-tests/
-├── unit/
-│   ├── test_error_injector.py    # Error injection strategies
-│   ├── test_agents.py             # Agent logic (mocked APIs)
-│   ├── test_metrics.py            # Distance calculations
-│   ├── test_embeddings.py         # Embedding generation
-│   └── test_cost_tracker.py       # Cost tracking logic
-├── integration/
-│   ├── test_pipeline.py           # Agent chain execution
-│   ├── test_experiment_runner.py  # Full experiment flow
-│   └── test_data_persistence.py   # File I/O operations
-├── e2e/
-│   └── test_full_workflow.py      # Complete workflow with real APIs
-├── fixtures/
-│   ├── sample_sentences.json      # Test data
-│   └── mock_responses.json        # Mocked API responses
-└── conftest.py                    # Shared fixtures
-```
+### 11.2 Adding New Metrics
 
-**Coverage Configuration (pytest.ini):**
-```ini
-[pytest]
-testpaths = tests
-python_files = test_*.py
-python_classes = Test*
-python_functions = test_*
-addopts =
-    --cov=src
-    --cov-report=html
-    --cov-report=term-missing
-    --cov-fail-under=70
-    --verbose
-markers =
-    slow: marks tests as slow
-    integration: marks tests as integration tests
-    e2e: marks tests as end-to-end tests
-```
+1. Add metric calculation in `src/metrics/vector_metrics.py`
+2. Update CSV output in `main.py`
+3. Optionally update visualization
 
-### 11.2 Code Quality Architecture
+### 11.3 Adding New Input Types
 
-**Linting Pipeline:**
-```
-Code Changes
-    │
-    ▼
-┌──────────────┐
-│ Black        │  Code formatting
-│ (formatter)  │
-└──────┬───────┘
-       │
-       ▼
-┌──────────────┐
-│ flake8       │  Style guide enforcement
-│              │  • PEP 8 compliance
-└──────┬───────┘  • Line length (100 chars)
-       │          • Complexity checks
-       ▼
-┌──────────────┐
-│ pylint       │  Code analysis
-│              │  • Code smells
-└──────┬───────┘  • Best practices
-       │          • Documentation
-       ▼
-┌──────────────┐
-│ mypy         │  Type checking
-│ (optional)   │
-└──────┬───────┘
-       │
-       ▼
-   ✅ Pass → Commit
-   ❌ Fail → Fix Issues
-```
-
-**Quality Gates:**
-- Linting: Zero warnings
-- Test coverage: ≥70%
-- Type hints: All public functions
-- Docstrings: All public classes/functions
-- Complexity: Max cyclomatic complexity = 10
-
-### 11.3 Git Workflow Architecture
-
-**Branch Strategy:**
-```
-main (stable)
-  │
-  ├─ develop (integration)
-  │    │
-  │    ├─ feature/translation-agents
-  │    ├─ feature/error-injection
-  │    ├─ feature/metrics-calculation
-  │    └─ feature/visualization
-  │
-  └─ hotfix/critical-bug (if needed)
-```
-
-**Commit Message Format:**
-```
-<type>(<scope>): <subject>
-
-<body>
-
-<footer>
-```
-
-Types: feat, fix, docs, test, refactor, chore
-Example:
-```
-feat(agents): add Hebrew to English translation agent
-
-Implement HebrewToEnglishAgent with Claude API integration.
-Includes retry logic and error handling.
-
-Closes #12
-```
-
-### 11.4 Documentation Architecture
-
-**Documentation Structure:**
-```
-docs/
-├── PRD.md                          # Product requirements
-├── ARCHITECTURE.md                 # This document
-├── prompts.md                      # Prompt engineering log
-├── ADRs/                          # Architecture decisions
-│   ├── 001-use-python.md
-│   ├── 002-claude-api.md
-│   ├── 003-cosine-distance.md
-│   ├── 004-local-storage.md
-│   ├── 005-cli-interface.md
-│   ├── 006-sentence-transformers.md
-│   └── 007-sequential-execution.md
-├── api/                           # API documentation
-│   ├── agents.md
-│   ├── metrics.md
-│   └── cli.md
-└── guides/                        # User guides
-    ├── getting-started.md
-    ├── running-experiments.md
-    └── interpreting-results.md
-```
-
-**ADR Template:**
-```markdown
-# ADR-XXX: Title
-
-## Status
-[Proposed | Accepted | Deprecated | Superseded]
-
-## Context
-What is the issue we're facing?
-
-## Decision
-What is the change we're proposing?
-
-## Rationale
-Why this decision? What are the benefits?
-
-## Alternatives Considered
-What other options did we evaluate?
-
-## Consequences
-### Positive
-- Benefit 1
-- Benefit 2
-
-### Negative
-- Drawback 1
-- Drawback 2
-
-### Risks
-- Risk 1 (with mitigation)
-
-## Compliance
-How does this align with project standards?
-```
+1. Create JSON file in `data/input/`
+2. No code changes needed
+3. Automatic detection
 
 ---
 
-## 12. Extensibility Architecture
+## 12. Operational Architecture
 
-### 12.1 Extension Points
+### 12.1 Deployment
 
-**1. Translation Providers**
-```python
-# Easy to add new translation services
-class GoogleTranslateAgent(TranslationAgent):
-    """Google Translate implementation."""
-    def translate(self, text: str) -> str:
-        # Use Google Translate API
-        pass
+- No deployment needed (local execution)
+- Virtual environment isolation
+- One-command setup: `./run_experiment.sh`
 
-# Register new agent
-agent_registry.register("google", GoogleTranslateAgent)
-```
+### 12.2 Monitoring
 
-**2. Error Injection Strategies**
-```python
-# Add new error types
-class PhoneticErrorStrategy(ErrorStrategy):
-    """Errors based on phonetic similarity."""
-    def apply(self, word: str) -> str:
-        # Replace with phonetically similar misspelling
-        pass
+- Console progress indicators
+- Logging to `logs/` directory
+- Error messages to stderr
+- Success metrics in output
 
-error_injector.add_strategy("phonetic", PhoneticErrorStrategy())
-```
+### 12.3 Backup
 
-**3. Distance Metrics**
-```python
-# Add new similarity measures
-class BERTScoreMetric(DistanceMetric):
-    """BERTScore-based semantic similarity."""
-    def calculate(self, text1: str, text2: str) -> float:
-        # Use BERTScore
-        pass
-
-metrics_calculator.register("bertscore", BERTScoreMetric())
-```
-
-**4. Visualization Formats**
-```python
-# Add new graph types
-class HeatmapVisualizer(Visualizer):
-    """Generate heatmap of error rates vs sentences."""
-    def generate(self, data: pd.DataFrame) -> Figure:
-        # Create heatmap
-        pass
-
-viz_factory.register("heatmap", HeatmapVisualizer())
-```
-
-### 12.2 Plugin Architecture
-
-**Plugin Interface:**
-```python
-class Plugin(ABC):
-    """Base class for all plugins."""
-
-    @property
-    @abstractmethod
-    def name(self) -> str:
-        """Plugin name."""
-        pass
-
-    @property
-    @abstractmethod
-    def version(self) -> str:
-        """Plugin version."""
-        pass
-
-    @abstractmethod
-    def initialize(self, config: Dict) -> None:
-        """Initialize plugin with configuration."""
-        pass
-
-    @abstractmethod
-    def execute(self, *args, **kwargs) -> Any:
-        """Execute plugin functionality."""
-        pass
-```
-
-**Plugin Discovery:**
-```python
-# Plugins placed in plugins/ directory
-# Auto-discovered and loaded at runtime
-plugin_manager = PluginManager()
-plugin_manager.discover("plugins/")
-plugin_manager.load_all()
-```
-
-### 12.3 Configuration-Driven Extensions
-
-**config.yaml:**
-```yaml
-agents:
-  - type: claude
-    source: en
-    target: fr
-    model: claude-3-5-sonnet
-  - type: claude
-    source: fr
-    target: he
-    model: claude-3-5-sonnet
-  # Easy to add new agent
-  - type: google
-    source: he
-    target: en
-    api_key: ${GOOGLE_API_KEY}
-
-error_strategies:
-  - substitution
-  - deletion
-  - transposition
-  # Add new strategy
-  - phonetic
-
-metrics:
-  - cosine
-  - euclidean
-  # Add new metric
-  - bertscore
-
-visualizations:
-  - line_plot
-  - scatter_plot
-  # Add new visualization
-  - heatmap
-```
+- Results in version control (optional)
+- Input files in git
+- SKILL agents in git
+- Easy to backup `results/` directory
 
 ---
 
-## 13. Appendix
-
-### 13.1 Technology Alternatives Matrix
-
-| Component | Primary Choice | Alternative 1 | Alternative 2 |
-|-----------|---------------|---------------|---------------|
-| Translation API | Claude | OpenAI GPT | Google Translate |
-| Embeddings | sentence-transformers | OpenAI embeddings | Universal Sentence Encoder |
-| CLI Framework | Click | argparse | Typer |
-| Visualization | Matplotlib | Plotly | Seaborn |
-| Data Format | JSON + CSV | SQLite | Parquet |
-
-### 11.2 System Capacity Planning
-
-| Metric | Small Scale | Medium Scale | Large Scale |
-|--------|-------------|--------------|-------------|
-| Sentences | 1-10 | 10-100 | 100-1000 |
-| Error Rates | 3-5 | 5-10 | 10-20 |
-| Total API Calls | 30-50 | 300-1000 | 3000-20000 |
-| Execution Time | 5-10 min | 30-60 min | 5-10 hours |
-| Storage Required | <10MB | <100MB | <1GB |
-| RAM Required | 2GB | 4GB | 8GB |
-
-### 11.3 Future Architecture Considerations
-
-**Potential Enhancements:**
-1. **Distributed Execution:** Agent pool with load balancing
-2. **Database Backend:** PostgreSQL for structured data
-3. **Caching Layer:** Redis for API response caching
-4. **Web Interface:** FastAPI + React dashboard
-5. **Real-time Monitoring:** Prometheus + Grafana
-6. **Containerization:** Docker for reproducible environments
-7. **CI/CD Pipeline:** GitHub Actions for testing and deployment
-
----
-
-## Document Revision History
-
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0 | 2025-01-23 | Architecture Team | Initial draft |
-
----
-
-**Approval Signatures**
-
-| Role | Name | Signature | Date |
-|------|------|-----------|------|
-| Technical Architect | | | |
-| Lead Developer | | | |
-| Product Owner | | | |
+**Document Version:** 2.0
+**Status:** Complete - System Fully Implemented
+**Last Updated:** November 23, 2025
