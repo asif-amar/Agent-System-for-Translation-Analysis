@@ -171,17 +171,22 @@ def main():
     print(request)
     print("-"*70)
 
+    # Show the expected output location
+    date_str = datetime.now().strftime('%Y-%m-%d')
+    input_name = Path(input_file).stem
+    expected_results_dir = f"results/{date_str}/{input_name}"
+
     print("\n" + "="*70)
     print("NEXT STEPS")
     print("="*70)
-    print("""
+    print(f"""
 1. Copy the request above
 2. Paste it in your Claude Code conversation
 3. Claude will execute all translations and provide JSON results
-4. Save the JSON results to a file:
-   results/claude_code_run/results_TIMESTAMP.json
+4. Results will be saved to:
+   {expected_results_dir}/results_TIMESTAMP.json
 5. Analyze the results:
-   python src/main.py analyze results/claude_code_run/results_TIMESTAMP.json
+   python src/main.py analyze {expected_results_dir}/results_TIMESTAMP.json
 
 Alternatively, Claude can save the results directly for you.
 """)

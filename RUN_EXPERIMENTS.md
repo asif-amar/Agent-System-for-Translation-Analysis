@@ -216,20 +216,34 @@ Then I (Claude) will:
 
 ## 📊 Results Location
 
-After running, find results in:
+After running, find results organized by date and input name:
 
-**With API**:
+**Directory Structure**:
 ```
-results/api_run/
-├── results_20251123_HHMMSS.json
-├── metrics_output.csv
-└── error_vs_distance.png
+results/
+└── YYYY-MM-DD/              # Date of experiment
+    ├── sanity_check/        # Input name
+    │   ├── request_HHMMSS.txt
+    │   ├── results_HHMMSS.json
+    │   ├── metrics_output.csv
+    │   └── error_vs_distance.png
+    ├── same_sentence_progressive/
+    │   ├── request_HHMMSS.txt
+    │   ├── results_HHMMSS.json
+    │   ├── metrics_output.csv
+    │   └── error_vs_distance.png
+    └── different_sentences_progressive/
+        ├── request_HHMMSS.txt
+        ├── results_HHMMSS.json
+        ├── metrics_output.csv
+        └── error_vs_distance.png
 ```
 
-**Without API (Claude Code)**:
+**Example** (run on 2025-11-23):
 ```
-results/claude_code_run/
-├── results_20251123_HHMMSS.json
+results/2025-11-23/same_sentence_progressive/
+├── request_212539.txt
+├── results_212600.json
 ├── metrics_output.csv
 └── error_vs_distance.png
 ```
@@ -241,14 +255,14 @@ results/claude_code_run/
 The script automatically runs analysis, but you can also run manually:
 
 ```bash
-# Analyze specific results
-python src/main.py analyze results/claude_code_run/results_20251123_HHMMSS.json
+# Analyze specific results (use actual date and input name)
+python src/main.py analyze results/2025-11-23/same_sentence_progressive/results_212600.json
 
 # View graph
-open results/claude_code_run/error_vs_distance.png
+open results/2025-11-23/same_sentence_progressive/error_vs_distance.png
 
 # View metrics
-cat results/claude_code_run/metrics_output.csv
+cat results/2025-11-23/same_sentence_progressive/metrics_output.csv
 ```
 
 ---

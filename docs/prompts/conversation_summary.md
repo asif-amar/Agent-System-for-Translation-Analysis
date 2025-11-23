@@ -261,6 +261,51 @@ The flat line at 0.0 is **CORRECT** and demonstrates:
 
 ---
 
+### 12. Results Directory Restructuring
+
+**User Request**: "I want to change the results structure. I want it to be: results/date_of_run/input_name/ and then all the data. I want it ordered with the date and the input.json name and then put there all the data"
+
+**New Structure**:
+```
+results/
+└── YYYY-MM-DD/                    # Date of experiment
+    ├── sanity_check/              # Input name
+    │   ├── request_HHMMSS.txt
+    │   ├── results_HHMMSS.json
+    │   ├── metrics_output.csv
+    │   └── error_vs_distance.png
+    ├── same_sentence_progressive/
+    └── different_sentences_progressive/
+```
+
+**Actions Taken**:
+1. ✅ Updated `src/run_with_agents.py`:
+   - Changed output directory to `results/YYYY-MM-DD/input_name/`
+   - Extract input name from file path
+   - Added command-line argument support for input file
+
+2. ✅ Updated `src/run_with_claude_code.py`:
+   - Save request files to new structure
+   - Update NEXT STEPS message with correct paths
+
+3. ✅ Created `src/save_claude_results.py`:
+   - Helper script to save Claude Code results
+   - Automatically organizes by date and input name
+   - Usage: `python src/save_claude_results.py <input_file> <results_json>`
+
+4. ✅ Updated documentation:
+   - [RUN_EXPERIMENTS.md](../../RUN_EXPERIMENTS.md) - New directory examples
+   - [EXPERIMENT_RESULTS.md](../../EXPERIMENT_RESULTS.md) - Updated file paths
+   - This conversation summary
+
+**Benefits**:
+- Better organization by date
+- Easy to find results for specific inputs
+- Clear separation between different experiment runs
+- Chronological ordering for reproducibility
+
+---
+
 ## Technical Fixes Applied
 
 ### 1. Pandas/Torch Compatibility (Python 3.13)

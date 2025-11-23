@@ -193,8 +193,8 @@ After completing all translations, provide the results in this JSON format:
 
 ```json
 {
-  "experiment_id": "claude_code_20251123_212539",
-  "timestamp": "2025-11-23T21:25:39.221387",
+  "experiment_id": "claude_code_20251123_214145",
+  "timestamp": "2025-11-23T21:41:45.164332",
   "mode": "claude_code_execution",
   "input_file": "different_sentences_progressive.json",
   "results": [

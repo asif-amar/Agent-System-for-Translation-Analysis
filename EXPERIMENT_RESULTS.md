@@ -210,12 +210,22 @@ The quick brown fox jumps over the lazy dog while the sun shines brightly in the
 
 ## Files Generated
 
-All experiment data and results are in:
+All experiment data and results are organized by date and input:
 ```
-results/claude_code_run/
-├── results_20251123_211500.json  (Complete translations, 8.3KB)
-├── metrics_output.csv             (Detailed metrics, 2.4KB)
-└── error_vs_distance.png          (Visualization, 120KB)
+results/YYYY-MM-DD/input_name/
+├── request_HHMMSS.txt          (Request for Claude Code)
+├── results_HHMMSS.json         (Complete translations)
+├── metrics_output.csv          (Detailed metrics)
+└── error_vs_distance.png       (Visualization)
+```
+
+Example:
+```
+results/2025-11-23/different_sentences_progressive/
+├── request_212539.txt          (Request, 3.2KB)
+├── results_212600.json         (Translations, 8.3KB)
+├── metrics_output.csv          (Metrics, 2.4KB)
+└── error_vs_distance.png       (Graph, 120KB)
 ```
 
 ---
@@ -224,21 +234,28 @@ results/claude_code_run/
 
 ### To Reproduce These Results:
 
-1. **Input Data**: [data/input/sentences.json](data/input/sentences.json)
-   - 11 test cases
-   - 0% to 50% error rates (5% increments)
+1. **Input Data**: Choose from [data/input/](data/input/)
+   - sanity_check.json (1 test case)
+   - same_sentence_progressive.json (11 test cases, 0-50% errors)
+   - different_sentences_progressive.json (11 test cases, different topics)
 
 2. **Translation**: Use SKILL agents manually or with Claude Code
    - Agent 1: [agents/agent-en-to-fr/SKILL.md](agents/agent-en-to-fr/SKILL.md)
    - Agent 2: [agents/agent-fr-to-he/SKILL.md](agents/agent-fr-to-he/SKILL.md)
    - Agent 3: [agents/agent-he-to-en/SKILL.md](agents/agent-he-to-en/SKILL.md)
 
-3. **Analysis**:
+3. **Run Experiment**:
    ```bash
-   python src/main.py analyze results/claude_code_run/results_20251123_211500.json
+   ./run_experiment.sh different
    ```
 
-4. **Visualization**: Graph automatically generated in analysis step
+4. **Analysis**:
+   ```bash
+   # Results automatically saved to: results/YYYY-MM-DD/input_name/
+   python src/main.py analyze results/2025-11-23/different_sentences_progressive/results_*.json
+   ```
+
+5. **Visualization**: Graph automatically generated in analysis step
 
 ---
 

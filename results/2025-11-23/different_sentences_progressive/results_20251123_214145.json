@@ -1,6 +1,6 @@
 {
-  "experiment_id": "claude_code_different_20251123_212600",
-  "timestamp": "2025-11-23T21:26:00.000000",
+  "experiment_id": "claude_code_different_20251123_214145",
+  "timestamp": "2025-11-23T21:41:45.000000",
   "mode": "claude_code_execution",
   "input_file": "different_sentences_progressive.json",
   "description": "Different sentences with progressive error rates - Real SKILL agent translations",
