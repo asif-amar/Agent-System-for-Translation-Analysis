@@ -14,9 +14,6 @@ cache/
 .cache/
 
 # Data and Results
-data/intermediate/
-data/output/
-results/
 *.pkl
 *.db
 

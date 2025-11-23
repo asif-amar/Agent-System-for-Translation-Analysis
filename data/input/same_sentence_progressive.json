@@ -1,0 +1,90 @@
+{
+  "sentences": [
+    {
+      "id": "same_sent_00",
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "error_rate": 0.0,
+      "word_count": 19
+    },
+    {
+      "id": "same_sent_05",
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "The quick brown fox jumps over the lasy dog while the sun shines brightly in the clear blue sky",
+      "error_rate": 0.05,
+      "word_count": 19
+    },
+    {
+      "id": "same_sent_10",
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "The quick brown fox jumps ovr the lasy dog while the sun shines brightly in the cler blue sky",
+      "error_rate": 0.10,
+      "word_count": 19
+    },
+    {
+      "id": "same_sent_15",
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "The quik brown fox jumps ovr the lasy dog while the sun shiens brightly in the cler blue sky",
+      "error_rate": 0.15,
+      "word_count": 19
+    },
+    {
+      "id": "same_sent_20",
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "The quik brown fox jumps ovr the lasy dog whle the sun shiens brightly in the cler blue sky",
+      "error_rate": 0.20,
+      "word_count": 19
+    },
+    {
+      "id": "same_sent_25",
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "Teh quik brown fox jumps ovr the lasy dog whle the sun shiens brightly in the cler blue sky",
+      "error_rate": 0.25,
+      "word_count": 19
+    },
+    {
+      "id": "same_sent_30",
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "Teh quik brown fox jmps ovr the lasy dog whle the sun shiens brightly in the cler bleu sky",
+      "error_rate": 0.30,
+      "word_count": 19
+    },
+    {
+      "id": "same_sent_35",
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "Teh quik brwon fox jmps ovr the lasy dog whle the snu shiens brightly in the cler bleu sky",
+      "error_rate": 0.35,
+      "word_count": 19
+    },
+    {
+      "id": "same_sent_40",
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "Teh quik brwon fox jmps ovr the lzy adog whle the snu shiens brgihtly in the cler bleu sky",
+      "error_rate": 0.40,
+      "word_count": 19
+    },
+    {
+      "id": "same_sent_45",
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "Teh qiuck brwon fox jmps ovr the lzy adog whiel the snu shiens brgihtly ni the celr bleu sky",
+      "error_rate": 0.45,
+      "word_count": 19
+    },
+    {
+      "id": "same_sent_50",
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "Teh qiuck brwon fox jmps ovr the lzy adog whiel the snu shiens brgihtly ni the celr bleu skye",
+      "error_rate": 0.50,
+      "word_count": 19
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "type": "same_sentence_progressive",
+    "created_at": "2025-11-23",
+    "description": "Same sentence with progressive error rates from 0% to 50%",
+    "error_rates": [0.0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50],
+    "total_sentences": 11,
+    "purpose": "Test how error rate affects translation quality for the same semantic content"
+  }
+}

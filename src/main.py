@@ -263,8 +263,12 @@ def analyze(ctx, results_file, output_dir, embedding_model):
     plotter = GraphPlotter()
     graph_file = output_dir / 'error_vs_distance.png'
 
+    # Add 'distance' column for plotter (use cosine_distance)
+    df_plot = df.copy()
+    df_plot['distance'] = df['cosine_distance']
+
     plotter.plot_error_vs_distance(
-        data=df,
+        data=df_plot,
         output_path=str(graph_file),
         dpi=300
     )

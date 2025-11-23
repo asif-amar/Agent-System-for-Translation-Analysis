@@ -1,0 +1,216 @@
+
+I need you to run real translations using the SKILL agent logic for this input file: different_sentences_progressive.json
+
+This file contains 11 test case(s).
+
+Here are the test cases:
+
+
+======================================================================
+Test Case 1/11
+======================================================================
+
+ID: diff_sent_00
+Error Rate: 0%
+Word Count: 19
+
+Original:
+The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky
+
+Misspelled (with errors):
+The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky
+
+
+======================================================================
+Test Case 2/11
+======================================================================
+
+ID: diff_sent_05
+Error Rate: 5%
+Word Count: 18
+
+Original:
+Artificial intelligence systems can process vast amounts of data and identify complex patterns with remarkable accuracy and efficiency
+
+Misspelled (with errors):
+Artificial intelligence systems can process vast amounts of data and identify complex patterns with remarkble accuracy and efficiency
+
+
+======================================================================
+Test Case 3/11
+======================================================================
+
+ID: diff_sent_10
+Error Rate: 10%
+Word Count: 18
+
+Original:
+Scientists around the world are working together to understand climate change and develop sustainable solutions for future generations
+
+Misspelled (with errors):
+Scientists around the world are working togethr to understand climate change and develop sustainble solutions for future generations
+
+
+======================================================================
+Test Case 4/11
+======================================================================
+
+ID: diff_sent_15
+Error Rate: 15%
+Word Count: 17
+
+Original:
+Modern technology has transformed the way people communicate and share information across different cultures and geographic boundaries
+
+Misspelled (with errors):
+Modern technology has transformd the way people communicate and share informtion across diferent cultures and geographic boundaries
+
+
+======================================================================
+Test Case 5/11
+======================================================================
+
+ID: diff_sent_20
+Error Rate: 20%
+Word Count: 18
+
+Original:
+Education plays a crucial role in developing critical thinking skills and preparing students for challenges in an ever-changing world
+
+Misspelled (with errors):
+Education plays a cruical role in developing critcal thinking skills and preparing students for chalenges in an ever-changing world
+
+
+======================================================================
+Test Case 6/11
+======================================================================
+
+ID: diff_sent_25
+Error Rate: 25%
+Word Count: 17
+
+Original:
+Medical researchers are making significant progress in understanding diseases and developing innovative treatments that improve patient outcomes
+
+Misspelled (with errors):
+Medical researchrs are making signifcant progress in understanding diseases and developng innovative treatments that improves patient outcomes
+
+
+======================================================================
+Test Case 7/11
+======================================================================
+
+ID: diff_sent_30
+Error Rate: 30%
+Word Count: 18
+
+Original:
+The global economy depends on international trade and cooperation between nations to ensure prosperity and stability for all people
+
+Misspelled (with errors):
+The global economy depends on internatioanl trade and coopertion between nations to ensure prosperety and stabillity for all pepole
+
+
+======================================================================
+Test Case 8/11
+======================================================================
+
+ID: diff_sent_35
+Error Rate: 35%
+Word Count: 18
+
+Original:
+Environmental conservation requires collective action and individual responsibility to protect natural resources and preserve biodiversity for future generations
+
+Misspelled (with errors):
+Enviromental conservtion requires colective action and individual responsibilty to protect natural resorces and preserve biodivesity for future generatons
+
+
+======================================================================
+Test Case 9/11
+======================================================================
+
+ID: diff_sent_40
+Error Rate: 40%
+Word Count: 17
+
+Original:
+Cultural diversity enriches societies by bringing different perspectives and traditions that contribute to creative innovation and mutual understanding
+
+Misspelled (with errors):
+Cultral diversity enrichs societies by bringin diferent perspectves and tradtions that contrbute to creative innovtion and mutual understading
+
+
+======================================================================
+Test Case 10/11
+======================================================================
+
+ID: diff_sent_45
+Error Rate: 45%
+Word Count: 18
+
+Original:
+Space exploration continues to inspire humanity and expand our knowledge of the universe while driving technological advancement and scientific discovery
+
+Misspelled (with errors):
+Space exploartion continues to inspir humanity and expnd our knowlege of the univers while drivng technological advancment and scientfic discovry
+
+
+======================================================================
+Test Case 11/11
+======================================================================
+
+ID: diff_sent_50
+Error Rate: 50%
+Word Count: 19
+
+Original:
+Democratic societies thrive when citizens actively participate in civic processes and work together to address social challenges through dialogue and compromise
+
+Misspelled (with errors):
+Democratc societies thrive when citizns activly particpate in civic proceses and work togethr to adress social chalenges thrugh dialoge and comprimise
+
+
+======================================================================
+TASK
+======================================================================
+
+Please translate ALL 11 test cases using your SKILL agent logic:
+
+For EACH test case:
+1. Agent 1 (EN→FR): Translate the misspelled English to French
+   - Use context to infer correct words from misspellings
+   - Produce natural, grammatically correct French
+
+2. Agent 2 (FR→HE): Translate the French to Hebrew
+   - Semantic translation (not word-by-word)
+   - Proper Hebrew grammar and syntax
+
+3. Agent 3 (HE→EN): Translate the Hebrew back to English
+   - This is the final output to compare with original
+
+After completing all translations, provide the results in this JSON format:
+
+```json
+{
+  "experiment_id": "claude_code_20251123_212539",
+  "timestamp": "2025-11-23T21:25:39.221387",
+  "mode": "claude_code_execution",
+  "input_file": "different_sentences_progressive.json",
+  "results": [
+    {
+      "id": "test_case_id",
+      "original": "original text",
+      "misspelled": "text with errors",
+      "error_rate": 0.15,
+      "french": "French translation from Agent 1",
+      "hebrew": "Hebrew translation from Agent 2",
+      "final": "Final English from Agent 3",
+      "word_count": 19
+    }
+    // ... repeat for all test cases
+  ]
+}
+```
+
+Please execute all 11 translations now and provide the complete JSON result.

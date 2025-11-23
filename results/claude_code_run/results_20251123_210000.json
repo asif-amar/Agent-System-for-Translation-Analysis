@@ -1,0 +1,74 @@
+{
+  "experiment_id": "claude_code_20251123_210000",
+  "timestamp": "2025-11-23T21:00:00.000000",
+  "mode": "claude_code_manual_execution",
+  "description": "Real translations executed by Claude Code using SKILL agent instructions",
+  "results": [
+    {
+      "id": "sent_001_0",
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "error_rate": 0.0,
+      "french": "Le renard brun rapide saute par-dessus le chien paresseux pendant que le soleil brille vivement dans le ciel bleu clair",
+      "hebrew": "השועל החום המהיר קופץ מעל הכלב העצלן בזמן שהשמש זורחת בבהירות בשמיים הכחולים הצלולים",
+      "final": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "word_count": 19,
+      "category": "descriptive"
+    },
+    {
+      "id": "sent_001_25",
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "Teh quik brown fox jumps ovr the lasy dog whle the sun shiens brightly in the cler blue sky",
+      "error_rate": 0.25,
+      "french": "Le renard brun rapide saute par-dessus le chien paresseux pendant que le soleil brille vivement dans le ciel bleu clair",
+      "hebrew": "השועל החום המהיר קופץ מעל הכלב העצלן בזמן שהשמש זורחת בבהירות בשמיים הכחולים הצלולים",
+      "final": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "word_count": 19,
+      "category": "descriptive"
+    },
+    {
+      "id": "sent_001_50",
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "Teh qiuck brwon fox jmps ovr the lzy adog whiel the snu shiens brgihtly ni the celr bleu sky",
+      "error_rate": 0.5,
+      "french": "Le renard brun rapide saute par-dessus le chien paresseux pendant que le soleil brille vivement dans le ciel bleu clair",
+      "hebrew": "השועל החום המהיר קופץ מעל הכלב העצלן בזמן שהשמש זורחת בבהירות בשמיים הכחולים הצלולים",
+      "final": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "word_count": 19,
+      "category": "descriptive"
+    },
+    {
+      "id": "sent_002_0",
+      "original": "Artificial intelligence systems can process vast amounts of data and identify complex patterns with remarkable accuracy and efficiency",
+      "misspelled": "Artificial intelligence systems can process vast amounts of data and identify complex patterns with remarkable accuracy and efficiency",
+      "error_rate": 0.0,
+      "french": "Les systèmes d'intelligence artificielle peuvent traiter de vastes quantités de données et identifier des modèles complexes avec une précision et une efficacité remarquables",
+      "hebrew": "מערכות בינה מלאכותית יכולות לעבד כמויות עצומות של נתונים ולזהות דפוסים מורכבים בדיוק וביעילות יוצאי דופן",
+      "final": "Artificial intelligence systems can process vast amounts of data and identify complex patterns with remarkable accuracy and efficiency",
+      "word_count": 18,
+      "category": "technical"
+    },
+    {
+      "id": "sent_002_25",
+      "original": "Artificial intelligence systems can process vast amounts of data and identify complex patterns with remarkable accuracy and efficiency",
+      "misspelled": "Artifical inteligence systms can proces vast amouts of data and idnetify complex paterns with remarkble accuracy and eficiency",
+      "error_rate": 0.25,
+      "french": "Les systèmes d'intelligence artificielle peuvent traiter de vastes quantités de données et identifier des modèles complexes avec une précision et une efficacité remarquables",
+      "hebrew": "מערכות בינה מלאכותית יכולות לעבד כמויות עצומות של נתונים ולזהות דפוסים מורכבים בדיוק וביעילות יוצאי דופן",
+      "final": "Artificial intelligence systems can process vast amounts of data and identify complex patterns with remarkable accuracy and efficiency",
+      "word_count": 18,
+      "category": "technical"
+    },
+    {
+      "id": "sent_002_50",
+      "original": "Artificial intelligence systems can process vast amounts of data and identify complex patterns with remarkable accuracy and efficiency",
+      "misspelled": "Artifiical inteligense systmes cna proces vsat amunts fo dtaa adn idnetfiy complx pattens wiht remrkable accurcy adn eficency",
+      "error_rate": 0.5,
+      "french": "Les systèmes d'intelligence artificielle peuvent traiter de vastes quantités de données et identifier des modèles complexes avec une précision et une efficacité remarquables",
+      "hebrew": "מערכות בינה מלאכותית יכולות לעבד כמויות עצומות של נתונים ולזהות דפוסים מורכבים בדיוק וביעילות יוצאי דופן",
+      "final": "Artificial intelligence systems can process vast amounts of data and identify complex patterns with remarkable accuracy and efficiency",
+      "word_count": 18,
+      "category": "technical"
+    }
+  ]
+}

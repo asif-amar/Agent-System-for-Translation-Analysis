@@ -1,0 +1,103 @@
+{
+  "sentences": [
+    {
+      "id": "diff_sent_00",
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "error_rate": 0.0,
+      "word_count": 19
+    },
+    {
+      "id": "diff_sent_05",
+      "original": "Artificial intelligence systems can process vast amounts of data and identify complex patterns with remarkable accuracy and efficiency",
+      "misspelled": "Artificial intelligence systems can process vast amounts of data and identify complex patterns with remarkble accuracy and efficiency",
+      "error_rate": 0.05,
+      "word_count": 18
+    },
+    {
+      "id": "diff_sent_10",
+      "original": "Scientists around the world are working together to understand climate change and develop sustainable solutions for future generations",
+      "misspelled": "Scientists around the world are working togethr to understand climate change and develop sustainble solutions for future generations",
+      "error_rate": 0.10,
+      "word_count": 18
+    },
+    {
+      "id": "diff_sent_15",
+      "original": "Modern technology has transformed the way people communicate and share information across different cultures and geographic boundaries",
+      "misspelled": "Modern technology has transformd the way people communicate and share informtion across diferent cultures and geographic boundaries",
+      "error_rate": 0.15,
+      "word_count": 17
+    },
+    {
+      "id": "diff_sent_20",
+      "original": "Education plays a crucial role in developing critical thinking skills and preparing students for challenges in an ever-changing world",
+      "misspelled": "Education plays a cruical role in developing critcal thinking skills and preparing students for chalenges in an ever-changing world",
+      "error_rate": 0.20,
+      "word_count": 18
+    },
+    {
+      "id": "diff_sent_25",
+      "original": "Medical researchers are making significant progress in understanding diseases and developing innovative treatments that improve patient outcomes",
+      "misspelled": "Medical researchrs are making signifcant progress in understanding diseases and developng innovative treatments that improves patient outcomes",
+      "error_rate": 0.25,
+      "word_count": 17
+    },
+    {
+      "id": "diff_sent_30",
+      "original": "The global economy depends on international trade and cooperation between nations to ensure prosperity and stability for all people",
+      "misspelled": "The global economy depends on internatioanl trade and coopertion between nations to ensure prosperety and stabillity for all pepole",
+      "error_rate": 0.30,
+      "word_count": 18
+    },
+    {
+      "id": "diff_sent_35",
+      "original": "Environmental conservation requires collective action and individual responsibility to protect natural resources and preserve biodiversity for future generations",
+      "misspelled": "Enviromental conservtion requires colective action and individual responsibilty to protect natural resorces and preserve biodivesity for future generatons",
+      "error_rate": 0.35,
+      "word_count": 18
+    },
+    {
+      "id": "diff_sent_40",
+      "original": "Cultural diversity enriches societies by bringing different perspectives and traditions that contribute to creative innovation and mutual understanding",
+      "misspelled": "Cultral diversity enrichs societies by bringin diferent perspectves and tradtions that contrbute to creative innovtion and mutual understading",
+      "error_rate": 0.40,
+      "word_count": 17
+    },
+    {
+      "id": "diff_sent_45",
+      "original": "Space exploration continues to inspire humanity and expand our knowledge of the universe while driving technological advancement and scientific discovery",
+      "misspelled": "Space exploartion continues to inspir humanity and expnd our knowlege of the univers while drivng technological advancment and scientfic discovry",
+      "error_rate": 0.45,
+      "word_count": 18
+    },
+    {
+      "id": "diff_sent_50",
+      "original": "Democratic societies thrive when citizens actively participate in civic processes and work together to address social challenges through dialogue and compromise",
+      "misspelled": "Democratc societies thrive when citizns activly particpate in civic proceses and work togethr to adress social chalenges thrugh dialoge and comprimise",
+      "error_rate": 0.50,
+      "word_count": 19
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "type": "different_sentences_progressive",
+    "created_at": "2025-11-23",
+    "description": "Different sentences with progressive error rates from 0% to 50%",
+    "error_rates": [0.0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50],
+    "total_sentences": 11,
+    "topics": [
+      "animals/nature",
+      "technology/AI",
+      "climate/science",
+      "communication/technology",
+      "education",
+      "medical research",
+      "economics",
+      "environment",
+      "culture",
+      "space exploration",
+      "democracy/society"
+    ],
+    "purpose": "Test how error rate affects translation quality across different semantic domains and sentence structures"
+  }
+}

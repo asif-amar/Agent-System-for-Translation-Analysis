@@ -1,0 +1,18 @@
+{
+  "sentences": [
+    {
+      "id": "sanity_001",
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "The quik brown fox jumps ovr the lasy dog while the sun shiens brightly in the cler blue sky",
+      "error_rate": 0.15,
+      "word_count": 19
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "type": "sanity_check",
+    "created_at": "2025-11-23",
+    "description": "Single test case with 15% error rate for sanity checking the system",
+    "purpose": "Quick validation that translation chain works correctly"
+  }
+}
