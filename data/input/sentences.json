@@ -1,0 +1,66 @@
+{
+  "sentences": [
+    {
+      "id": "sent_001_0",
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "error_rate": 0.0,
+      "word_count": 19,
+      "language": "en",
+      "category": "descriptive"
+    },
+    {
+      "id": "sent_001_25",
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "Teh quik brown fox jumps ovr the lasy dog whle the sun shiens brightly in the cler blue sky",
+      "error_rate": 0.25,
+      "word_count": 19,
+      "language": "en",
+      "category": "descriptive"
+    },
+    {
+      "id": "sent_001_50",
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "Teh qiuck brwon fox jmps ovr the lzy adog whiel the snu shiens brgihtly ni the celr bleu sky",
+      "error_rate": 0.50,
+      "word_count": 19,
+      "language": "en",
+      "category": "descriptive"
+    },
+    {
+      "id": "sent_002_0",
+      "original": "Artificial intelligence systems can process vast amounts of data and identify complex patterns with remarkable accuracy and efficiency",
+      "misspelled": "Artificial intelligence systems can process vast amounts of data and identify complex patterns with remarkable accuracy and efficiency",
+      "error_rate": 0.0,
+      "word_count": 19,
+      "language": "en",
+      "category": "technical"
+    },
+    {
+      "id": "sent_002_25",
+      "original": "Artificial intelligence systems can process vast amounts of data and identify complex patterns with remarkable accuracy and efficiency",
+      "misspelled": "Artifical inteligence systms can proces vast amouts of data and idnetify complex paterns with remarkble accuracy and eficiency",
+      "error_rate": 0.25,
+      "word_count": 19,
+      "language": "en",
+      "category": "technical"
+    },
+    {
+      "id": "sent_002_50",
+      "original": "Artificial intelligence systems can process vast amounts of data and identify complex patterns with remarkable accuracy and efficiency",
+      "misspelled": "Artifiical inteligense systmes cna proces vsat amunts fo dtaa adn idnetfiy complx pattens wiht remrkable accurcy adn eficency",
+      "error_rate": 0.50,
+      "word_count": 19,
+      "language": "en",
+      "category": "technical"
+    }
+  ],
+  "metadata": {
+    "version": "2.0",
+    "created_at": "2025-11-23",
+    "min_word_count": 15,
+    "description": "Pre-corrupted sentences for translation quality analysis experiments",
+    "error_rates": [0.0, 0.25, 0.50],
+    "note": "Sentences are provided with spelling errors already introduced"
+  }
+}
