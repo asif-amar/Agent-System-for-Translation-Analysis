@@ -1,0 +1,570 @@
+# Claude Rules for Translation Analysis Pipeline Project
+# Based on M.Sc. Computer Science Software Guidelines - Dr. Yoram Segal, 2025
+
+## Project Context
+This is an academic M.Sc. project implementing a multi-step agent system for translation quality analysis.
+All code, documentation, and deliverables must meet academic and professional software engineering standards.
+
+## Core Principles
+
+### 1. Documentation Standards
+- Maintain PRD and Architecture documents as living documents
+- Update documents when requirements or design changes occur
+- Every significant architectural decision must be recorded in an ADR
+- Keep a Prompt Engineering Log for all LLM interactions
+- Document API usage and costs (token tracking)
+
+### 2. Code Quality Standards
+
+#### 2.1 Code Structure
+- Follow modular architecture with clear separation of concerns
+- Use feature-based or layered organization
+- Keep files under 300 lines when possible
+- Single Responsibility Principle for all classes and functions
+- DRY (Don't Repeat Yourself) - extract common logic
+
+#### 2.2 Documentation in Code
+- Every module must have a docstring explaining its purpose
+- Every public class must have a docstring with:
+  - Purpose and responsibility
+  - Key attributes
+  - Usage examples (if complex)
+- Every public function/method must have a docstring with:
+  - Brief description of what it does
+  - Args: parameter descriptions with types
+  - Returns: return value description with type
+  - Raises: exceptions that may be raised
+- Use inline comments for complex logic, algorithms, or non-obvious decisions
+- Follow PEP 257 docstring conventions for Python
+
+Example:
+```python
+def calculate_vector_distance(text1: str, text2: str, metric: str = "cosine") -> float:
+    """
+    Calculate semantic distance between two texts using embeddings.
+
+    Args:
+        text1: First text to compare
+        text2: Second text to compare
+        metric: Distance metric to use ("cosine" or "euclidean")
+
+    Returns:
+        Distance value as float. For cosine: 0 (identical) to 2 (opposite).
+        For euclidean: 0 (identical) to infinity.
+
+    Raises:
+        ValueError: If metric is not supported or texts are empty
+        EmbeddingError: If embedding generation fails
+
+    Example:
+        >>> distance = calculate_vector_distance("hello world", "hello earth")
+        >>> print(f"Distance: {distance:.3f}")
+        Distance: 0.156
+    """
+    pass
+```
+
+#### 2.3 Naming Conventions
+- Classes: PascalCase (e.g., `TranslationAgent`, `ErrorInjector`)
+- Functions/methods: snake_case (e.g., `translate_text`, `inject_errors`)
+- Constants: UPPER_SNAKE_CASE (e.g., `MAX_RETRIES`, `DEFAULT_MODEL`)
+- Private members: prefix with underscore (e.g., `_internal_state`)
+- Descriptive names that reveal intent (avoid abbreviations)
+
+### 3. Configuration and Security
+
+#### 3.1 Configuration Management
+- Never hardcode configuration values in source code
+- Use environment variables via `.env` file
+- Provide `example.env` with all required variables (without real values)
+- Support multiple environments (dev, test, prod) if needed
+- Validate all configuration on startup
+
+#### 3.2 Secret Management
+- NEVER commit API keys, tokens, or passwords to git
+- Load secrets from environment variables only
+- Use `.gitignore` to exclude `.env`, `secrets/`, and credential files
+- Log warnings (not errors) if secrets are missing, with clear instructions
+- Never log or print secret values, even in debug mode
+- Mask secrets in error messages (show only first/last 4 chars)
+
+#### 3.3 .gitignore Requirements
+Ensure `.gitignore` includes:
+```
+# Secrets
+.env
+.env.*
+!.env.example
+secrets/
+*.key
+*.pem
+
+# API Response Cache
+cache/
+*.cache
+
+# Data and Results
+data/intermediate/
+data/output/
+results/
+*.pkl
+*.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+```
+
+### 4. Testing Requirements
+
+#### 4.1 Test Coverage
+- Target: 70-80% code coverage minimum
+- Focus on core logic: agents, error injection, metrics calculation
+- Test edge cases and error conditions, not just happy paths
+- Use pytest with coverage plugin
+- Generate coverage reports in CI/CD
+
+#### 4.2 Test Types
+- **Unit Tests**: Test individual functions and classes in isolation
+- **Integration Tests**: Test agent chains and API interactions
+- **Edge Case Tests**: Empty inputs, malformed data, extreme values
+- **Error Handling Tests**: API failures, timeouts, invalid configs
+
+#### 4.3 Test Structure
+```
+tests/
+├── unit/
+│   ├── test_error_injector.py
+│   ├── test_agents.py
+│   └── test_metrics.py
+├── integration/
+│   ├── test_pipeline.py
+│   └── test_end_to_end.py
+├── fixtures/
+│   └── sample_data.py
+└── conftest.py
+```
+
+#### 4.4 Test Documentation
+- Each test function should have a docstring explaining what it tests
+- Use descriptive test names: `test_error_injection_with_zero_rate_returns_original`
+- Group related tests in classes
+- Use pytest markers for slow tests, integration tests, etc.
+
+### 5. Error Handling
+
+#### 5.1 Defensive Programming
+- Validate all inputs at boundaries (API, CLI, file I/O)
+- Check preconditions and fail fast with clear errors
+- Handle expected errors gracefully (API rate limits, network issues)
+- Let unexpected errors bubble up (don't catch Exception blindly)
+- Use context managers for resource cleanup
+
+#### 5.2 Error Messages
+- Provide actionable error messages that tell users what to do
+- Bad: "Error in agent"
+- Good: "Translation failed: API rate limit exceeded. Retrying in 5 seconds... (attempt 1/3)"
+- Include context: what operation failed, what was expected, what happened
+- For validation errors, explain what values are acceptable
+
+#### 5.3 Retry Logic
+- Implement exponential backoff for transient failures
+- Maximum retry attempts should be configurable
+- Log each retry attempt with context
+- Distinguish between retryable and permanent errors
+
+Example:
+```python
+@retry(
+    max_attempts=3,
+    backoff_factor=2,
+    exceptions=(RateLimitError, TimeoutError)
+)
+def translate_with_retry(text: str) -> str:
+    """Translate with automatic retry on transient failures."""
+    pass
+```
+
+### 6. Experimental and Research Standards
+
+#### 6.1 Reproducibility
+- All experiments must be reproducible with random seed
+- Document all hyperparameters and configuration
+- Save exact versions of models and libraries used
+- Timestamp all experiment runs
+
+#### 6.2 Sensitivity Analysis
+- Vary error rates from 0% to 50% in increments (e.g., 0, 10, 20, 30, 40, 50)
+- Test with multiple sentences (at least 2-3 diverse examples)
+- Document how results change with parameters
+- Identify thresholds or inflection points
+
+#### 6.3 Results Presentation
+- Use Jupyter notebooks for exploratory analysis
+- Generate publication-quality graphs (300 DPI, clear labels)
+- Include statistical measures: mean, std dev, confidence intervals
+- Provide both raw data (CSV/JSON) and visualizations
+- Write analysis narrative explaining findings
+
+#### 6.4 Prompt Engineering Log
+Maintain `docs/prompts.md` with:
+- Date and version
+- Goal of the prompt
+- Full prompt text
+- Model and parameters used
+- Sample outputs
+- What worked / didn't work
+- Iterations and improvements
+
+### 7. Cost Tracking and Monitoring
+
+#### 7.1 Token Usage Tracking
+- Log input and output tokens for every API call
+- Aggregate by agent, by experiment, and total
+- Calculate costs based on model pricing
+- Generate cost reports: `reports/cost_analysis.csv`
+
+#### 7.2 Cost Optimization
+- Cache API responses when appropriate
+- Batch requests when possible
+- Use cheaper models for non-critical tasks
+- Monitor and alert on unusual usage patterns
+
+#### 7.3 Cost Report Format
+```csv
+date,agent,model,input_tokens,output_tokens,cost_usd,experiments
+2025-01-23,EnglishToFrench,claude-3-5-sonnet,1250,890,0.012,exp_001
+2025-01-23,FrenchToHebrew,claude-3-5-sonnet,890,675,0.009,exp_001
+```
+
+### 8. Git and Version Control
+
+#### 8.1 Commit Standards
+- Write clear, concise commit messages in imperative mood
+- Good: "Add error injection with configurable strategies"
+- Bad: "fixed stuff" or "updates"
+- Structure: `<type>: <subject>` (e.g., "feat:", "fix:", "docs:", "test:")
+- Keep commits atomic (one logical change per commit)
+
+#### 8.2 Branching Strategy
+- `main`: stable, working code
+- `develop`: integration branch for features
+- `feature/X`: individual features or experiments
+- Use pull requests for code review (even in solo projects)
+
+#### 8.3 Version Tags
+- Tag releases: `v0.1.0`, `v1.0.0`
+- Follow semantic versioning: MAJOR.MINOR.PATCH
+- Tag significant milestones (e.g., "Phase 1 complete")
+
+### 9. README Requirements
+
+The README.md must include:
+
+1. **Project Title and Description**
+   - One-sentence summary
+   - Longer description of purpose and goals
+
+2. **Key Features**
+   - Bullet list of main capabilities
+
+3. **Prerequisites**
+   - Python version
+   - Required system dependencies
+   - API account requirements
+
+4. **Installation**
+   ```bash
+   # Step-by-step commands
+   git clone <repo>
+   cd project
+   python -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   cp example.env .env
+   # Edit .env with your API keys
+   ```
+
+5. **Configuration**
+   - How to set up `.env`
+   - What each config option does
+   - Example values
+
+6. **Usage**
+   - Basic CLI commands with examples
+   - Expected outputs
+   - Where to find results
+
+7. **Project Structure**
+   - Overview of directory layout
+   - Purpose of each major directory
+
+8. **Running Tests**
+   ```bash
+   pytest tests/ --cov=src --cov-report=html
+   ```
+
+9. **Running Experiments**
+   - Example commands for full experiments
+   - How to interpret results
+
+10. **Documentation**
+    - Links to PRD, Architecture, ADRs
+    - Link to Prompt Engineering Log
+
+11. **License** (if applicable)
+
+12. **Authors and Acknowledgments**
+
+### 10. Quality Standards (ISO/IEC 25010)
+
+Map implementation to quality characteristics:
+
+#### 10.1 Functional Suitability
+- Functional completeness: All required features implemented
+- Functional correctness: Produces accurate results
+- Functional appropriateness: Suitable for intended use
+
+#### 10.2 Performance Efficiency
+- Time behavior: Translation chain completes in <60s
+- Resource utilization: Memory usage under 2GB
+- Capacity: Handles up to 100 sentences
+
+#### 10.3 Compatibility
+- Co-existence: Works with other tools in ecosystem
+- Interoperability: Standard data formats (JSON, CSV)
+
+#### 10.4 Usability
+- Appropriateness recognizability: Clear what system does
+- Learnability: New users can start in <15 minutes
+- Operability: Easy to execute common tasks
+- Error protection: Validates inputs, prevents mistakes
+- User interface aesthetics: Clean CLI output
+
+#### 10.5 Reliability
+- Maturity: Handles errors without crashing
+- Availability: Works when needed (depends on APIs)
+- Fault tolerance: Graceful degradation on failures
+- Recoverability: Can resume after interruption
+
+#### 10.6 Security
+- Confidentiality: API keys protected
+- Integrity: Data not corrupted
+- Non-repudiation: Logs track operations
+- Accountability: Actions logged with timestamps
+- Authenticity: Validates API responses
+
+#### 10.7 Maintainability
+- Modularity: Clear component boundaries
+- Reusability: Components usable in other contexts
+- Analyzability: Easy to diagnose issues
+- Modifiability: Easy to change components
+- Testability: Easy to write tests
+
+#### 10.8 Portability
+- Adaptability: Works on Linux, macOS, Windows
+- Installability: Simple setup process
+- Replaceability: Can swap translation providers
+
+### 11. When Writing Code
+
+#### 11.1 Before Implementing Features
+- Check if feature aligns with PRD requirements
+- Review Architecture document for design guidance
+- Consider if new ADR is needed for significant decisions
+- Plan test cases before writing code
+
+#### 11.2 While Implementing
+- Write docstrings as you write functions
+- Add inline comments for complex logic
+- Validate inputs at boundaries
+- Handle errors appropriately
+- Write tests alongside code (TDD when possible)
+
+#### 11.3 After Implementing
+- Run tests and check coverage
+- Update documentation if behavior changed
+- Run linter (flake8, pylint) and fix issues
+- Test edge cases and error conditions
+- Update cost tracking if API calls added
+
+### 12. Logging Standards
+
+#### 12.1 Log Levels
+- **DEBUG**: Detailed diagnostic info (API requests/responses, intermediate values)
+- **INFO**: Major steps in workflow (experiment started, translation completed)
+- **WARNING**: Unexpected but handled situations (retries, fallbacks)
+- **ERROR**: Errors that prevent operation completion
+- **CRITICAL**: System-level failures
+
+#### 12.2 Log Format
+```
+[2025-01-23 10:30:15] [INFO] [EnglishToFrenchAgent] Translation started for 15-word sentence
+[2025-01-23 10:30:16] [DEBUG] [API] Request: {"model": "claude-3-5-sonnet", "tokens": 125}
+[2025-01-23 10:30:17] [DEBUG] [API] Response: {"translation": "...", "tokens": 89}
+[2025-01-23 10:30:17] [INFO] [EnglishToFrenchAgent] Translation completed (1.2s)
+```
+
+#### 12.3 What to Log
+- Experiment start/end with parameters
+- Each translation step with timing
+- API calls (without secrets or full responses)
+- Errors and exceptions with context
+- Cost/token usage per operation
+- Cache hits/misses
+
+#### 12.4 What NOT to Log
+- API keys or secrets
+- Full API responses (log summaries instead)
+- Personal data or sensitive content
+- Redundant info that clutters logs
+
+### 13. Extensibility Points
+
+Design for future extensions:
+
+#### 13.1 Plugin Architecture
+- Agent interface allows adding new translation providers
+- Error injection strategies can be extended
+- Distance metrics can be added
+- Visualization formats can be extended
+
+#### 13.2 Configuration-Driven
+- Models configurable (not hardcoded)
+- Error rates configurable
+- Output formats configurable
+- Graph styles configurable
+
+#### 13.3 Abstractions
+- Abstract base classes for agents, metrics, visualizers
+- Factory patterns for creating components
+- Dependency injection for flexibility
+
+### 14. Code Review Checklist
+
+Before considering code complete:
+
+- [ ] All functions have docstrings
+- [ ] Complex logic has comments
+- [ ] No hardcoded values (use config)
+- [ ] No secrets in code
+- [ ] Input validation at boundaries
+- [ ] Error handling with clear messages
+- [ ] Tests written and passing
+- [ ] Test coverage ≥70%
+- [ ] Linter passes (no warnings)
+- [ ] Git commits are clear and atomic
+- [ ] Documentation updated
+- [ ] Cost/token tracking implemented
+- [ ] Logging added for key operations
+
+### 15. Deliverables Checklist
+
+Final submission must include:
+
+- [ ] PRD (up to date)
+- [ ] Architecture Document (up to date)
+- [ ] README with complete instructions
+- [ ] Source code (modular, documented)
+- [ ] Tests (passing, ≥70% coverage)
+- [ ] Configuration files (example.env)
+- [ ] Input sentences (≥15 words, with metadata)
+- [ ] Results data (CSV/JSON)
+- [ ] Visualizations (graphs, PNG/SVG)
+- [ ] Analysis notebook (Jupyter)
+- [ ] Prompt Engineering Log
+- [ ] Cost Analysis Report
+- [ ] Git history (clean commits)
+- [ ] .gitignore (properly configured)
+
+### 16. Academic Integrity
+
+- All sources must be cited (papers, libraries, code snippets)
+- If using code from StackOverflow or similar, add comment with source
+- LLM-generated code must be reviewed, understood, and tested
+- Document all external dependencies in requirements.txt with versions
+- Prompt Engineering Log serves as documentation of AI usage
+
+### 17. Performance Optimization
+
+When optimizing:
+- Profile first (don't optimize prematurely)
+- Focus on bottlenecks (typically API calls, embeddings)
+- Consider caching for repeated operations
+- Batch operations when possible
+- Document optimization decisions in ADRs
+
+---
+
+## Quick Reference for Common Tasks
+
+### Adding a New Agent
+1. Create class inheriting from `TranslationAgent`
+2. Implement `translate()` method with docstring
+3. Add error handling and retry logic
+4. Write unit tests (test_agents.py)
+5. Update Architecture document
+6. Record decision in ADR
+
+### Running an Experiment
+```bash
+# Set up environment
+source venv/bin/activate
+export $(cat .env | xargs)
+
+# Run experiment
+python src/main.py run-experiment \
+  --input data/sentences.json \
+  --error-rates 0,25,50 \
+  --output-dir results/ \
+  --seed 42
+
+# Check results
+ls results/
+```
+
+### Checking Code Quality
+```bash
+# Run tests with coverage
+pytest tests/ --cov=src --cov-report=html --cov-report=term
+
+# Run linter
+flake8 src/ --max-line-length=100
+
+# Check for security issues
+pip-audit
+
+# Format code
+black src/ tests/
+```
+
+---
+
+## Remember
+
+**Quality over speed.** Take time to write clean, documented, tested code.
+**Document as you go.** Don't leave documentation for the end.
+**Think like a researcher.** Be rigorous, reproducible, and transparent.
+**Think like an engineer.** Write maintainable, extensible, professional code.
+
+This is academic work that represents your capabilities as a computer scientist.
+Make it excellent.
