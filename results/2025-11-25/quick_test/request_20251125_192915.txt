@@ -1,0 +1,126 @@
+
+I need you to run real translations using the SKILL agent logic for this input file: quick_test.json
+
+This file contains 5 test case(s).
+
+Here are the test cases:
+
+
+======================================================================
+Test Case 1/5
+======================================================================
+
+ID: same_sent_00
+Error Rate: 0%
+Word Count: 19
+
+Original:
+The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky
+
+Misspelled (with errors):
+The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky
+
+
+======================================================================
+Test Case 2/5
+======================================================================
+
+ID: same_sent_05
+Error Rate: 5%
+Word Count: 19
+
+Original:
+The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky
+
+Misspelled (with errors):
+The quick brown fox jumps over the lasy dog while the sun shines brightly in the clear blue sky
+
+
+======================================================================
+Test Case 3/5
+======================================================================
+
+ID: same_sent_10
+Error Rate: 10%
+Word Count: 19
+
+Original:
+The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky
+
+Misspelled (with errors):
+The quick brown fox jumps ovr the lasy dog while the sun shines brightly in the cler blue sky
+
+
+======================================================================
+Test Case 4/5
+======================================================================
+
+ID: same_sent_15
+Error Rate: 15%
+Word Count: 19
+
+Original:
+The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky
+
+Misspelled (with errors):
+The quik brown fox jumps ovr the lasy dog while the sun shiens brightly in the cler blue sky
+
+
+======================================================================
+Test Case 5/5
+======================================================================
+
+ID: same_sent_20
+Error Rate: 20%
+Word Count: 19
+
+Original:
+The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky
+
+Misspelled (with errors):
+The quik brown fox jumps ovr the lasy dog whle the sun shiens brightly in the cler blue sky
+
+
+======================================================================
+TASK
+======================================================================
+
+Please translate ALL 5 test cases using your SKILL agent logic:
+
+For EACH test case:
+1. Agent 1 (EN→FR): Translate the misspelled English to French
+   - Use context to infer correct words from misspellings
+   - Produce natural, grammatically correct French
+
+2. Agent 2 (FR→HE): Translate the French to Hebrew
+   - Semantic translation (not word-by-word)
+   - Proper Hebrew grammar and syntax
+
+3. Agent 3 (HE→EN): Translate the Hebrew back to English
+   - This is the final output to compare with original
+
+After completing all translations, provide the results in this JSON format:
+
+```json
+{
+  "experiment_id": "claude_code_20251125_192915",
+  "timestamp": "2025-11-25T19:29:15.330292",
+  "mode": "claude_code_execution",
+  "input_file": "quick_test.json",
+  "results": [
+    {
+      "id": "test_case_id",
+      "original": "original text",
+      "misspelled": "text with errors",
+      "error_rate": 0.15,
+      "french": "French translation from Agent 1",
+      "hebrew": "Hebrew translation from Agent 2",
+      "final": "Final English from Agent 3",
+      "word_count": 19
+    }
+    // ... repeat for all test cases
+  ]
+}
+```
+
+Please execute all 5 translations now and provide the complete JSON result.

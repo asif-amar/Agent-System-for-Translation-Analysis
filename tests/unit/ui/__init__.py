@@ -1,0 +1,3 @@
+"""
+UI unit tests package.
+"""
