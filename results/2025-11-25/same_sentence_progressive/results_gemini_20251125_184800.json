@@ -1,0 +1,35 @@
+{
+  "experiment_id": "gemini_20251125_184800",
+  "timestamp": "2025-11-25T18:48:00.130027",
+  "mode": "gemini_api",
+  "model": "gemini-2.5-flash",
+  "results": [
+    {
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "error_rate": 0.0,
+      "french": "Le renard brun rapide saute par-dessus le chien paresseux pendant que le soleil brille vivement dans le ciel bleu clair.",
+      "hebrew": "השועל החום המהיר קופץ מעל הכלב העצלן בזמן שהשמש זורחת בבהירות בשמיים הכחולים הבהירים.",
+      "final": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the bright blue sky.",
+      "word_count": 19
+    },
+    {
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "The quick brown fox jumps over the lasy dog while the sun shines brightly in the clear blue sky",
+      "error_rate": 0.05,
+      "french": "Le renard brun rapide saute par-dessus le chien paresseux tandis que le soleil brille vivement dans le ciel bleu clair.",
+      "hebrew": "השועל החום המהיר קופץ מעל הכלב העצלן, והשמש זורחת בבהירות בשמיים הכחולים הבהירים.",
+      "final": "The quick brown fox jumps over the lazy dog, and the sun shines brightly in the clear blue sky.",
+      "word_count": 19
+    },
+    {
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "The quick brown fox jumps ovr the lasy dog while the sun shines brightly in the cler blue sky",
+      "error_rate": 0.1,
+      "french": "Le renard brun rapide saute par-dessus le chien paresseux tandis que le soleil brille vivement dans le ciel bleu clair.",
+      "hebrew": "השועל החום המהיר קופץ מעל הכלב העצלן בעוד שהשמש זורחת בבהירות בשמיים הכחולים הבהירים.",
+      "final": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the bright blue sky.",
+      "word_count": 19
+    }
+  ]
+}

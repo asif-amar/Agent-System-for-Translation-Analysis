@@ -1,0 +1,107 @@
+{
+  "experiment_id": "gemini_20251125_185828",
+  "timestamp": "2025-11-25T18:58:28.394449",
+  "mode": "gemini_api",
+  "model": "gemini-2.5-flash",
+  "results": [
+    {
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "error_rate": 0.0,
+      "french": "Le renard brun rapide saute par-dessus le chien paresseux tandis que le soleil brille de mille feux dans le ciel bleu clair.",
+      "hebrew": "השועל החום המהיר קופץ מעל הכלב העצלן כשהשמש בוהקת בשמיים הכחולים הבהירים",
+      "final": "The quick brown fox jumps over the lazy dog as the sun shines in the bright blue sky",
+      "word_count": 19
+    },
+    {
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "The quick brown fox jumps over the lasy dog while the sun shines brightly in the clear blue sky",
+      "error_rate": 0.05,
+      "french": "Le renard brun rapide saute par-dessus le chien paresseux tandis que le soleil brille intensément dans le ciel bleu clair.",
+      "hebrew": "השועל החום המהיר קופץ מעל הכלב העצלן בזמן שהשמש זורחת בעוצמה בשמיים הכחולים הבהירים",
+      "final": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "word_count": 19
+    },
+    {
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "The quick brown fox jumps ovr the lasy dog while the sun shines brightly in the cler blue sky",
+      "error_rate": 0.1,
+      "french": "Le renard brun rapide saute par-dessus le chien paresseux pendant que le soleil brille de mille feux dans le ciel bleu clair.",
+      "hebrew": "השועל החום המהיר קופץ מעל הכלב העצלן בעוד שהשמש זורחת במלוא הדרה בשמיים הכחולים והבהירים.",
+      "final": "The quick brown fox jumps over the lazy dog while the sun shines in its full glory in the blue and clear skies.",
+      "word_count": 19
+    },
+    {
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "The quik brown fox jumps ovr the lasy dog while the sun shiens brightly in the cler blue sky",
+      "error_rate": 0.15,
+      "french": "Le renard brun rapide saute par-dessus le chien paresseux tandis que le soleil brille de mille feux dans le ciel bleu clair",
+      "hebrew": "השועל החום המהיר קופץ מעל הכלב העצלן בעוד שהשמש זורחת במלוא הדרה בשמיים הכחולים הבהירים",
+      "final": "The quick brown fox jumps over the lazy dog while the sun shines in all its glory in the bright blue sky.",
+      "word_count": 19
+    },
+    {
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "The quik brown fox jumps ovr the lasy dog whle the sun shiens brightly in the cler blue sky",
+      "error_rate": 0.2,
+      "french": "Le renard brun rapide saute par-dessus le chien paresseux tandis que le soleil brille vivement dans le ciel bleu clair",
+      "hebrew": "השועל החום המהיר קופץ מעל הכלב העצלן בזמן שהשמש זורחת בבהירות בשמיים הכחולים הבהירים",
+      "final": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the bright blue sky.",
+      "word_count": 19
+    },
+    {
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "Teh quik brown fox jumps ovr the lasy dog whle the sun shiens brightly in the cler blue sky",
+      "error_rate": 0.25,
+      "french": "Le renard brun rapide saute par-dessus le chien paresseux pendant que le soleil brille vivement dans le ciel bleu clair.",
+      "hebrew": "השועל החום המהיר קופץ מעל הכלב העצלן בזמן שהשמש זורחת בבהירות בשמיים הכחולים הבהירים.",
+      "final": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the bright blue sky.",
+      "word_count": 19
+    },
+    {
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "Teh quik brown fox jmps ovr the lasy dog whle the sun shiens brightly in the cler bleu sky",
+      "error_rate": 0.3,
+      "french": "Le renard brun rapide saute par-dessus le chien paresseux tandis que le soleil brille de mille feux dans le ciel bleu clair",
+      "hebrew": "השועל החום המהיר קופץ מעל הכלב העצלן, בעוד שהשמש בוהקת בשמיים הכחולים הבהירים.",
+      "final": "The quick brown fox jumps over the lazy dog, while the sun shines brightly in the bright blue sky.",
+      "word_count": 19
+    },
+    {
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "Teh quik brwon fox jmps ovr the lasy dog whle the snu shiens brightly in the cler bleu sky",
+      "error_rate": 0.35,
+      "french": "Le renard brun rapide saute par-dessus le chien paresseux pendant que le soleil brille vivement dans le ciel bleu clair.",
+      "hebrew": "השועל החום המהיר קופץ מעל הכלב העצלן בזמן שהשמש זורחת בבהירות בשמיים הכחולים הבהירים.",
+      "final": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky.",
+      "word_count": 19
+    },
+    {
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "Teh quik brwon fox jmps ovr the lzy adog whle the snu shiens brgihtly in the cler bleu sky",
+      "error_rate": 0.4,
+      "french": "Le renard brun rapide saute par-dessus le chien paresseux tandis que le soleil brille de mille feux dans le ciel bleu clair.",
+      "hebrew": "השועל החום המהיר קופץ מעל הכלב העצלן בזמן שהשמש זורחת במלוא הדרה בשמיים הכחולים הבהירים.",
+      "final": "The quick brown fox jumps over the lazy dog while the sun shines in its full glory in the bright blue sky.",
+      "word_count": 19
+    },
+    {
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "Teh qiuck brwon fox jmps ovr the lzy adog whiel the snu shiens brgihtly ni the celr bleu sky",
+      "error_rate": 0.45,
+      "french": "Le renard brun rapide saute par-dessus le chien paresseux tandis que le soleil brille vivement dans le ciel bleu clair",
+      "hebrew": "השועל החום המהיר קופץ מעל הכלב העצלן בעוד שהשמש זורחת בבהירות בשמיים הכחולים הבהירים",
+      "final": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "word_count": 19
+    },
+    {
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "Teh qiuck brwon fox jmps ovr the lzy adog whiel the snu shiens brgihtly ni the celr bleu skye",
+      "error_rate": 0.5,
+      "french": "Le renard brun rapide saute par-dessus le chien paresseux pendant que le soleil brille vivement dans le ciel bleu clair",
+      "hebrew": "השועל החום המהיר קופץ מעל הכלב העצלן בזמן שהשמש זורחת בבהירות בשמיים הכחולים הבהירים",
+      "final": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the bright blue sky.",
+      "word_count": 19
+    }
+  ]
+}

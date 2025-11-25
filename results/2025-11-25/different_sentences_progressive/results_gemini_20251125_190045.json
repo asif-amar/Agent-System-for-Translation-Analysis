@@ -1,0 +1,26 @@
+{
+  "experiment_id": "gemini_20251125_190045",
+  "timestamp": "2025-11-25T19:00:45.261511",
+  "mode": "gemini_api",
+  "model": "gemini-2.5-flash",
+  "results": [
+    {
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "error_rate": 0.0,
+      "french": "Le renard brun rapide saute par-dessus le chien paresseux tandis que le soleil brille intensément dans le ciel bleu clair",
+      "hebrew": "השועל החום המהיר קופץ מעל הכלב העצלן כאשר השמש זורחת בעוצמה בשמיים הכחולים הבהירים",
+      "final": "The quick brown fox jumps over the lazy dog when the sun shines intensely in the bright blue sky",
+      "word_count": 19
+    },
+    {
+      "original": "Artificial intelligence systems can process vast amounts of data and identify complex patterns with remarkable accuracy and efficiency",
+      "misspelled": "Artificial intelligence systems can process vast amounts of data and identify complex patterns with remarkble accuracy and efficiency",
+      "error_rate": 0.05,
+      "french": "Les systèmes d'intelligence artificielle peuvent traiter de grandes quantités de données et identifier des modèles complexes avec une précision et une efficacité remarquables.",
+      "hebrew": "מערכות בינה מלאכותית יכולות לעבד כמויות גדולות של נתונים ולזהות דפוסים מורכבים בדיוק וביעילות יוצאי דופן.",
+      "final": "Artificial intelligence systems can process large amounts of data and identify complex patterns with exceptional accuracy and efficiency.",
+      "word_count": 18
+    }
+  ]
+}
