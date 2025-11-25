@@ -1,0 +1,6 @@
+error_rate,cosine_distance,cosine_similarity,euclidean_distance,manhattan_distance,original,final,word_count
+0.0,0.0,1.0,0.0,0.0,The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky,The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky,19
+0.05,0.0,1.0,0.0,0.0,The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky,The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky,19
+0.1,0.0,1.0,0.0,0.0,The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky,The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky,19
+0.15,0.0,1.0,0.0,0.0,The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky,The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky,19
+0.2,0.0,1.0,0.0,0.0,The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky,The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky,19

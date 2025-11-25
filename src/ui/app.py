@@ -38,36 +38,50 @@ def initialize_session_state():
     if 'analyzer' not in st.session_state:
         st.session_state.analyzer = ResultsAnalyzer()
 
+    if 'current_page' not in st.session_state:
+        st.session_state.current_page = "Home"
 
-def setup_page():
-    """Configure page settings."""
-    config = st.session_state.config
 
+def main():
+    """Main application entry point."""
+    # Configure page settings FIRST before any other st commands
     st.set_page_config(
-        page_title=config.page_title,
-        page_icon=config.page_icon,
-        layout=config.layout,
+        page_title="Translation Quality Analysis",
+        page_icon="🌐",
+        layout="wide",
         initial_sidebar_state="expanded"
     )
 
+    # Initialize session state
+    initialize_session_state()
 
-def render_sidebar():
-    """Render the sidebar navigation."""
-    st.sidebar.title("Navigation")
+    # Add custom CSS for left-aligned sidebar buttons
+    st.markdown("""
+        <style>
+        .stSidebar button {
+            text-align: left !important;
+            justify-content: flex-start !important;
+        }
+        .stSidebar button div {
+            display: flex;
+            justify-content: flex-start !important;
+            text-align: left !important;
+        }
+        .stSidebar button p {
+            text-align: left !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
 
-    pages = {
-        "Home": "home",
-        "Run Experiment": "experiment",
-        "Analyze Results": "analyze",
-        "Visualize Data": "visualize",
-        "Compare Translations": "compare"
-    }
+    # Sidebar navigation
+    pages = ["Home", "Run Experiment", "Analyze Results", "Visualize Data", "Compare Translations"]
+    icons = ["🏠", "🧪", "📊", "📈", "🔄"]
 
-    selected_page = st.sidebar.radio(
-        "Select Page",
-        list(pages.keys()),
-        key="navigation"
-    )
+    # Create clickable navigation with left-aligned text
+    for page, icon in zip(pages, icons):
+        button_label = f"{icon} {page}"
+        if st.sidebar.button(button_label, key=page, use_container_width=True):
+            st.session_state.current_page = page
 
     st.sidebar.markdown("---")
     st.sidebar.info(
@@ -76,31 +90,24 @@ def render_sidebar():
         "through a chain of automated language transformations."
     )
 
-    return pages[selected_page]
-
-
-def main():
-    """Main application entry point."""
-    initialize_session_state()
-    setup_page()
-
-    page = render_sidebar()
-
     # Import page modules
-    from ui.pages import (
-        home, experiment, analyze, visualize, compare
-    )
+    from ui.page_modules import home, experiment, analyze, visualize, compare
 
-    # Route to appropriate page
-    page_functions = {
-        "home": home.render,
-        "experiment": experiment.render,
-        "analyze": analyze.render,
-        "visualize": visualize.render,
-        "compare": compare.render
+    # Route to appropriate page based on session state
+    page_mapping = {
+        "Home": home.render,
+        "Run Experiment": experiment.render,
+        "Analyze Results": analyze.render,
+        "Visualize Data": visualize.render,
+        "Compare Translations": compare.render
     }
 
-    page_functions[page]()
+    # Render the current page
+    current_page = st.session_state.current_page
+    if current_page in page_mapping:
+        page_mapping[current_page]()
+    else:
+        home.render()
 
 
 if __name__ == "__main__":
