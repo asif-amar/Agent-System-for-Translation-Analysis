@@ -1,0 +1,208 @@
+======================================================================
+CLAUDE CODE AGENT PROMPTS
+Experiment ID: exp_20251125_200842
+======================================================================
+
+Instructions:
+1. Copy each prompt below into Claude Code CLI
+2. Record the output for each step
+3. Use the output as input for the next agent in the chain
+
+
+======================================================================
+Test Case: 0% Error Rate
+======================================================================
+
+# Step 1: English → French (Agent: agent-en-to-fr)
+claude-code "Translate to French: The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky"
+
+# Step 2: French → Hebrew (Agent: agent-fr-to-he)
+# Replace [FRENCH_OUTPUT] with the result from Step 1
+claude-code "Translate to Hebrew: [FRENCH_OUTPUT]"
+
+# Step 3: Hebrew → English (Agent: agent-he-to-en)
+# Replace [HEBREW_OUTPUT] with the result from Step 2
+claude-code "Translate to English: [HEBREW_OUTPUT]"
+
+# Expected: Record all outputs in results.json
+
+
+======================================================================
+Test Case: 5% Error Rate
+======================================================================
+
+# Step 1: English → French (Agent: agent-en-to-fr)
+claude-code "Translate to French: Artificial intelligence systems can process vast amounts of data and identify complex patterns with remarkble accuracy and efficiency"
+
+# Step 2: French → Hebrew (Agent: agent-fr-to-he)
+# Replace [FRENCH_OUTPUT] with the result from Step 1
+claude-code "Translate to Hebrew: [FRENCH_OUTPUT]"
+
+# Step 3: Hebrew → English (Agent: agent-he-to-en)
+# Replace [HEBREW_OUTPUT] with the result from Step 2
+claude-code "Translate to English: [HEBREW_OUTPUT]"
+
+# Expected: Record all outputs in results.json
+
+
+======================================================================
+Test Case: 10% Error Rate
+======================================================================
+
+# Step 1: English → French (Agent: agent-en-to-fr)
+claude-code "Translate to French: Scientists around the world are working togethr to understand climate change and develop sustainble solutions for future generations"
+
+# Step 2: French → Hebrew (Agent: agent-fr-to-he)
+# Replace [FRENCH_OUTPUT] with the result from Step 1
+claude-code "Translate to Hebrew: [FRENCH_OUTPUT]"
+
+# Step 3: Hebrew → English (Agent: agent-he-to-en)
+# Replace [HEBREW_OUTPUT] with the result from Step 2
+claude-code "Translate to English: [HEBREW_OUTPUT]"
+
+# Expected: Record all outputs in results.json
+
+
+======================================================================
+Test Case: 15% Error Rate
+======================================================================
+
+# Step 1: English → French (Agent: agent-en-to-fr)
+claude-code "Translate to French: Modern technology has transformd the way people communicate and share informtion across diferent cultures and geographic boundaries"
+
+# Step 2: French → Hebrew (Agent: agent-fr-to-he)
+# Replace [FRENCH_OUTPUT] with the result from Step 1
+claude-code "Translate to Hebrew: [FRENCH_OUTPUT]"
+
+# Step 3: Hebrew → English (Agent: agent-he-to-en)
+# Replace [HEBREW_OUTPUT] with the result from Step 2
+claude-code "Translate to English: [HEBREW_OUTPUT]"
+
+# Expected: Record all outputs in results.json
+
+
+======================================================================
+Test Case: 20% Error Rate
+======================================================================
+
+# Step 1: English → French (Agent: agent-en-to-fr)
+claude-code "Translate to French: Education plays a cruical role in developing critcal thinking skills and preparing students for chalenges in an ever-changing world"
+
+# Step 2: French → Hebrew (Agent: agent-fr-to-he)
+# Replace [FRENCH_OUTPUT] with the result from Step 1
+claude-code "Translate to Hebrew: [FRENCH_OUTPUT]"
+
+# Step 3: Hebrew → English (Agent: agent-he-to-en)
+# Replace [HEBREW_OUTPUT] with the result from Step 2
+claude-code "Translate to English: [HEBREW_OUTPUT]"
+
+# Expected: Record all outputs in results.json
+
+
+======================================================================
+Test Case: 25% Error Rate
+======================================================================
+
+# Step 1: English → French (Agent: agent-en-to-fr)
+claude-code "Translate to French: Medical researchrs are making signifcant progress in understanding diseases and developng innovative treatments that improves patient outcomes"
+
+# Step 2: French → Hebrew (Agent: agent-fr-to-he)
+# Replace [FRENCH_OUTPUT] with the result from Step 1
+claude-code "Translate to Hebrew: [FRENCH_OUTPUT]"
+
+# Step 3: Hebrew → English (Agent: agent-he-to-en)
+# Replace [HEBREW_OUTPUT] with the result from Step 2
+claude-code "Translate to English: [HEBREW_OUTPUT]"
+
+# Expected: Record all outputs in results.json
+
+
+======================================================================
+Test Case: 30% Error Rate
+======================================================================
+
+# Step 1: English → French (Agent: agent-en-to-fr)
+claude-code "Translate to French: The global economy depends on internatioanl trade and coopertion between nations to ensure prosperety and stabillity for all pepole"
+
+# Step 2: French → Hebrew (Agent: agent-fr-to-he)
+# Replace [FRENCH_OUTPUT] with the result from Step 1
+claude-code "Translate to Hebrew: [FRENCH_OUTPUT]"
+
+# Step 3: Hebrew → English (Agent: agent-he-to-en)
+# Replace [HEBREW_OUTPUT] with the result from Step 2
+claude-code "Translate to English: [HEBREW_OUTPUT]"
+
+# Expected: Record all outputs in results.json
+
+
+======================================================================
+Test Case: 35% Error Rate
+======================================================================
+
+# Step 1: English → French (Agent: agent-en-to-fr)
+claude-code "Translate to French: Enviromental conservtion requires colective action and individual responsibilty to protect natural resorces and preserve biodivesity for future generatons"
+
+# Step 2: French → Hebrew (Agent: agent-fr-to-he)
+# Replace [FRENCH_OUTPUT] with the result from Step 1
+claude-code "Translate to Hebrew: [FRENCH_OUTPUT]"
+
+# Step 3: Hebrew → English (Agent: agent-he-to-en)
+# Replace [HEBREW_OUTPUT] with the result from Step 2
+claude-code "Translate to English: [HEBREW_OUTPUT]"
+
+# Expected: Record all outputs in results.json
+
+
+======================================================================
+Test Case: 40% Error Rate
+======================================================================
+
+# Step 1: English → French (Agent: agent-en-to-fr)
+claude-code "Translate to French: Cultral diversity enrichs societies by bringin diferent perspectves and tradtions that contrbute to creative innovtion and mutual understading"
+
+# Step 2: French → Hebrew (Agent: agent-fr-to-he)
+# Replace [FRENCH_OUTPUT] with the result from Step 1
+claude-code "Translate to Hebrew: [FRENCH_OUTPUT]"
+
+# Step 3: Hebrew → English (Agent: agent-he-to-en)
+# Replace [HEBREW_OUTPUT] with the result from Step 2
+claude-code "Translate to English: [HEBREW_OUTPUT]"
+
+# Expected: Record all outputs in results.json
+
+
+======================================================================
+Test Case: 45% Error Rate
+======================================================================
+
+# Step 1: English → French (Agent: agent-en-to-fr)
+claude-code "Translate to French: Space exploartion continues to inspir humanity and expnd our knowlege of the univers while drivng technological advancment and scientfic discovry"
+
+# Step 2: French → Hebrew (Agent: agent-fr-to-he)
+# Replace [FRENCH_OUTPUT] with the result from Step 1
+claude-code "Translate to Hebrew: [FRENCH_OUTPUT]"
+
+# Step 3: Hebrew → English (Agent: agent-he-to-en)
+# Replace [HEBREW_OUTPUT] with the result from Step 2
+claude-code "Translate to English: [HEBREW_OUTPUT]"
+
+# Expected: Record all outputs in results.json
+
+
+======================================================================
+Test Case: 50% Error Rate
+======================================================================
+
+# Step 1: English → French (Agent: agent-en-to-fr)
+claude-code "Translate to French: Democratc societies thrive when citizns activly particpate in civic proceses and work togethr to adress social chalenges thrugh dialoge and comprimise"
+
+# Step 2: French → Hebrew (Agent: agent-fr-to-he)
+# Replace [FRENCH_OUTPUT] with the result from Step 1
+claude-code "Translate to Hebrew: [FRENCH_OUTPUT]"
+
+# Step 3: Hebrew → English (Agent: agent-he-to-en)
+# Replace [HEBREW_OUTPUT] with the result from Step 2
+claude-code "Translate to English: [HEBREW_OUTPUT]"
+
+# Expected: Record all outputs in results.json
+

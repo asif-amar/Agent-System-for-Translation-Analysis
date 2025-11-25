@@ -1,0 +1,105 @@
+{
+  "experiment_id": "exp_20251125_200842",
+  "timestamp": "2025-11-25T20:08:42.363002",
+  "results": [
+    {
+      "error_rate": 0.0,
+      "original": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "misspelled": "The quick brown fox jumps over the lazy dog while the sun shines brightly in the clear blue sky",
+      "french": "TODO: Paste Agent 1 output here",
+      "hebrew": "TODO: Paste Agent 2 output here",
+      "final": "TODO: Paste Agent 3 output here",
+      "word_count": 19
+    },
+    {
+      "error_rate": 0.05,
+      "original": "Artificial intelligence systems can process vast amounts of data and identify complex patterns with remarkable accuracy and efficiency",
+      "misspelled": "Artificial intelligence systems can process vast amounts of data and identify complex patterns with remarkble accuracy and efficiency",
+      "french": "TODO: Paste Agent 1 output here",
+      "hebrew": "TODO: Paste Agent 2 output here",
+      "final": "TODO: Paste Agent 3 output here",
+      "word_count": 18
+    },
+    {
+      "error_rate": 0.1,
+      "original": "Scientists around the world are working together to understand climate change and develop sustainable solutions for future generations",
+      "misspelled": "Scientists around the world are working togethr to understand climate change and develop sustainble solutions for future generations",
+      "french": "TODO: Paste Agent 1 output here",
+      "hebrew": "TODO: Paste Agent 2 output here",
+      "final": "TODO: Paste Agent 3 output here",
+      "word_count": 18
+    },
+    {
+      "error_rate": 0.15,
+      "original": "Modern technology has transformed the way people communicate and share information across different cultures and geographic boundaries",
+      "misspelled": "Modern technology has transformd the way people communicate and share informtion across diferent cultures and geographic boundaries",
+      "french": "TODO: Paste Agent 1 output here",
+      "hebrew": "TODO: Paste Agent 2 output here",
+      "final": "TODO: Paste Agent 3 output here",
+      "word_count": 17
+    },
+    {
+      "error_rate": 0.2,
+      "original": "Education plays a crucial role in developing critical thinking skills and preparing students for challenges in an ever-changing world",
+      "misspelled": "Education plays a cruical role in developing critcal thinking skills and preparing students for chalenges in an ever-changing world",
+      "french": "TODO: Paste Agent 1 output here",
+      "hebrew": "TODO: Paste Agent 2 output here",
+      "final": "TODO: Paste Agent 3 output here",
+      "word_count": 19
+    },
+    {
+      "error_rate": 0.25,
+      "original": "Medical researchers are making significant progress in understanding diseases and developing innovative treatments that improve patient outcomes",
+      "misspelled": "Medical researchrs are making signifcant progress in understanding diseases and developng innovative treatments that improves patient outcomes",
+      "french": "TODO: Paste Agent 1 output here",
+      "hebrew": "TODO: Paste Agent 2 output here",
+      "final": "TODO: Paste Agent 3 output here",
+      "word_count": 17
+    },
+    {
+      "error_rate": 0.3,
+      "original": "The global economy depends on international trade and cooperation between nations to ensure prosperity and stability for all people",
+      "misspelled": "The global economy depends on internatioanl trade and coopertion between nations to ensure prosperety and stabillity for all pepole",
+      "french": "TODO: Paste Agent 1 output here",
+      "hebrew": "TODO: Paste Agent 2 output here",
+      "final": "TODO: Paste Agent 3 output here",
+      "word_count": 19
+    },
+    {
+      "error_rate": 0.35,
+      "original": "Environmental conservation requires collective action and individual responsibility to protect natural resources and preserve biodiversity for future generations",
+      "misspelled": "Enviromental conservtion requires colective action and individual responsibilty to protect natural resorces and preserve biodivesity for future generatons",
+      "french": "TODO: Paste Agent 1 output here",
+      "hebrew": "TODO: Paste Agent 2 output here",
+      "final": "TODO: Paste Agent 3 output here",
+      "word_count": 18
+    },
+    {
+      "error_rate": 0.4,
+      "original": "Cultural diversity enriches societies by bringing different perspectives and traditions that contribute to creative innovation and mutual understanding",
+      "misspelled": "Cultral diversity enrichs societies by bringin diferent perspectves and tradtions that contrbute to creative innovtion and mutual understading",
+      "french": "TODO: Paste Agent 1 output here",
+      "hebrew": "TODO: Paste Agent 2 output here",
+      "final": "TODO: Paste Agent 3 output here",
+      "word_count": 18
+    },
+    {
+      "error_rate": 0.45,
+      "original": "Space exploration continues to inspire humanity and expand our knowledge of the universe while driving technological advancement and scientific discovery",
+      "misspelled": "Space exploartion continues to inspir humanity and expnd our knowlege of the univers while drivng technological advancment and scientfic discovry",
+      "french": "TODO: Paste Agent 1 output here",
+      "hebrew": "TODO: Paste Agent 2 output here",
+      "final": "TODO: Paste Agent 3 output here",
+      "word_count": 20
+    },
+    {
+      "error_rate": 0.5,
+      "original": "Democratic societies thrive when citizens actively participate in civic processes and work together to address social challenges through dialogue and compromise",
+      "misspelled": "Democratc societies thrive when citizns activly particpate in civic proceses and work togethr to adress social chalenges thrugh dialoge and comprimise",
+      "french": "TODO: Paste Agent 1 output here",
+      "hebrew": "TODO: Paste Agent 2 output here",
+      "final": "TODO: Paste Agent 3 output here",
+      "word_count": 21
+    }
+  ]
+}

@@ -95,7 +95,8 @@ def render():
 
     mode = st.radio(
         "Choose execution mode",
-        ["Prepare Only (Generate prompts for manual execution)",
+        ["Run Automatically (Execute translations now)",
+         "Prepare Only (Generate prompts for manual execution)",
          "Prepare and Analyze (If results already exist)"],
         help="Select how to execute the experiment"
     )
@@ -103,28 +104,95 @@ def render():
     # Action buttons
     st.markdown("---")
 
-    col1, col2 = st.columns(2)
-
-    with col1:
-        prepare_button = st.button(
-            "Prepare Experiment",
+    if mode == "Run Automatically (Execute translations now)":
+        run_button = st.button(
+            "▶️ Run Experiment Now",
             type="primary",
-            width="stretch",
-            help="Generate experiment configuration and agent prompts"
+            use_container_width=True,
+            help="Execute full translation experiment automatically"
         )
+    else:
+        col1, col2 = st.columns(2)
 
-    with col2:
-        if mode == "Prepare and Analyze (If results already exist)":
-            analyze_button = st.button(
-                "Analyze Results",
-                type="secondary",
+        with col1:
+            prepare_button = st.button(
+                "Prepare Experiment",
+                type="primary",
                 width="stretch",
-                disabled=True,
-                help="Available after preparing experiment"
+                help="Generate experiment configuration and agent prompts"
             )
 
+        with col2:
+            if mode == "Prepare and Analyze (If results already exist)":
+                analyze_button = st.button(
+                    "Analyze Results",
+                    type="secondary",
+                    width="stretch",
+                    disabled=True,
+                    help="Available after preparing experiment"
+                )
+
+    # Handle automatic run
+    if mode == "Run Automatically (Execute translations now)" and 'run_button' in locals() and run_button:
+        progress_bar = st.progress(0)
+        status_text = st.empty()
+
+        def progress_callback(message):
+            status_text.text(message)
+
+        try:
+            progress_bar.progress(10)
+            status_text.text("Starting automatic experiment...")
+
+            output_dir = custom_output if custom_output else None
+            result = runner.run_full_experiment(
+                input_file=selected_dataset['path'],
+                output_dir=output_dir,
+                progress_callback=progress_callback
+            )
+
+            progress_bar.progress(100)
+
+            if result['success']:
+                st.success(result['message'])
+
+                st.subheader("Experiment Complete!")
+
+                col1, col2 = st.columns(2)
+
+                with col1:
+                    st.metric("Sentences Translated", result['num_sentences'])
+                    st.metric("Results File", "✓ Saved")
+
+                with col2:
+                    st.markdown("**Results Location:**")
+                    st.code(result['results_file'], language="text")
+
+                st.info("""
+                **Next Steps:**
+
+                1. Go to **Analyze Results** to calculate semantic distance metrics
+                2. Visit **Visualize Data** to see interactive charts
+                3. Use **Compare Translations** for side-by-side comparison
+                """)
+
+                if st.button("Go to Analyze Results"):
+                    st.session_state.current_page = "Analyze Results"
+                    st.rerun()
+            else:
+                st.error(f"Experiment failed: {result.get('error', 'Unknown error')}")
+
+        except Exception as e:
+            st.error(f"Error during experiment: {e}")
+            import traceback
+            with st.expander("Error Details"):
+                st.code(traceback.format_exc())
+        finally:
+            progress_bar.empty()
+            status_text.empty()
+
     # Handle prepare action
-    if prepare_button:
+    elif 'prepare_button' in locals() and prepare_button:
         with st.spinner("Preparing experiment..."):
             try:
                 output_dir = custom_output if custom_output else None
